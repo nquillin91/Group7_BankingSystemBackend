@@ -36,6 +36,10 @@ public String getReceiverAccountNumber() {
 	return receiverAccountNumber;
 }
 
+
+
+
+
 public void setReceiverAccountNumber(String receiverAccountNumber) {
 	this.receiverAccountNumber = receiverAccountNumber;
 }
