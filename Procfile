@@ -1,1 +1,0 @@
-web: java -jar build/libs/BankingSystem_Backend-1.0.jar
