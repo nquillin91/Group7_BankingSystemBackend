@@ -18,6 +18,7 @@ dependencies {
 	compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor', version: '2.3.3.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: '2.3.3.RELEASE'
 	compile group: 'javax.transaction', name: 'jta', version: '1.1'
+	compile group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
 	
 	runtime group: 'com.h2database', name: 'h2', version: '1.4.197'
 	
