@@ -17,7 +17,22 @@ public class AccountService {
 	
     @Autowired
     private AccountRepository accountRepository;
+    
+    public String init() {
+    	logger.info("initializing users");
 
+        Account u1 = new Account("Paul", "Smith");
+        accountRepository.save(u1);
+
+        Account u2 = new Account("Robert", "Black");
+        accountRepository.save(u2);
+
+        Account u3 = new Account("John", "Doe");
+        accountRepository.save(u3);
+        
+        return "Init completed";
+    }
+    
     public List<Account> findAll() {
 
         Iterable<Account> it = accountRepository.findAll();
