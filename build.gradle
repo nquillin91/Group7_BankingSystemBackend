@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
 	compile group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+	annotationProcessor 'org.projectlombok:lombok:1.18.12'
+	
 	compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 	compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.3.3.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor', version: '2.3.3.RELEASE'

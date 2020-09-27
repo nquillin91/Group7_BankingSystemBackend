@@ -3,6 +3,8 @@ package com.group7.banking.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,8 @@ import com.group7.banking.repository.AccountRepository;
 
 @Service
 public class AccountService {
-
+	Logger logger = LoggerFactory.getLogger(AccountService.class);
+	
     @Autowired
     private AccountRepository accountRepository;
 
@@ -20,7 +23,12 @@ public class AccountService {
         Iterable<Account> it = accountRepository.findAll();
 
         ArrayList<Account> users = new ArrayList<Account>();
-        it.forEach(e -> users.add(e));
+        it.forEach(e -> {
+        	logger.debug(e.getId().toString());
+        	logger.debug(e.getFirstName());
+        	logger.debug(e.getLastName());
+        	users.add(e);
+        });
 
         return users;
     }
