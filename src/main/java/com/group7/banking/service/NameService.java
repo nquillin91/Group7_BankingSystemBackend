@@ -12,11 +12,22 @@ import com.group7.banking.model.Account;
 import com.group7.banking.repository.AccountRepository;
 
 @Service
-public class AccountService {
-	Logger logger = LoggerFactory.getLogger(AccountService.class);
+public class NameService {
+	Logger logger = LoggerFactory.getLogger(NameService.class);
 	
     @Autowired
     private AccountRepository accountRepository;
+    
+    public String clearAndInit() {
+    	logger.info("Clearing all data");
+    	accountRepository.deleteAll();
+    	
+    	logger.info("Initializing users");
+    	
+    	
+    	
+    	return "Cleared and re-initialized";
+    }
     
     public List<Account> findAll() {
 
