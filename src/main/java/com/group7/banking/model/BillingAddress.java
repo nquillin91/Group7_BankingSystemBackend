@@ -69,7 +69,7 @@ public class BillingAddress  implements Serializable {
 				"BillingAddress[id=%d, address_line_1='%s',"
 				+ "address_line_2='%s', city='%s', state='%s',"
 				+ "zipcode='%s',"
-				+ "created_date='%t', last_updated_date='%t']",
+				+ "created_date='%tD', last_updated_date='%tD']",
 				id, addressLine1, addressLine2, city, state, zipcode,
 				createdDate, lastUpdatedDate);
 	}

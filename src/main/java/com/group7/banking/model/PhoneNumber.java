@@ -46,7 +46,7 @@ public class PhoneNumber  implements Serializable {
 	public String toString() {
 		return String.format(
 				"EmailAddress[id=%d, phone_number='%s',"
-				+ "created_date='%t', last_updated_date='%t']",
+				+ "created_date='%tD', last_updated_date='%tD']",
 				id, phoneNumber, createdDate, lastUpdatedDate);
 	}
 }

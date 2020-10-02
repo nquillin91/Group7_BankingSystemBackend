@@ -18,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="users")
@@ -31,9 +32,10 @@ public class User implements Serializable {
 	
 	@Getter
 	@Column(name="user_name")
-	private String userName;
+	private String username;
 	
 	@Getter
+	@Setter
 	@Column(name="password")
 	private String password;
 	
@@ -68,6 +70,11 @@ public class User implements Serializable {
 	private List<Account> accounts = new ArrayList<Account>();
 	
 	@Getter
+	@Setter
+	@Column(name="enabled")
+	private Boolean enabled;
+	
+	@Getter
 	@Column(name="created_date")
 	private Date createdDate;
 	
@@ -77,15 +84,16 @@ public class User implements Serializable {
 
 	protected User() {}
 
-	public User(String userName, String password, Name name, BillingAddress billingAddr,
+	public User(String username, String password, Name name, BillingAddress billingAddr,
 			EmailAddress emailAddr, PhoneNumber phoneNum, SSN ssn) {
-		this.userName = userName;
+		this.username = username;
 		this.password = password;
 		this.name = name;
 		this.billingAddress = billingAddr;
 		this.emailAddress = emailAddr;
 		this.phoneNumber = phoneNum;
 		this.ssn = ssn;
+		this.enabled = false;
 		this.createdDate = new Date();
 		this.lastUpdatedDate = new Date();
 	}
@@ -97,10 +105,10 @@ public class User implements Serializable {
 	@Override
 	public String toString() {
 		return String.format(
-				"User[id=%d, userName='%s',"
+				"User[id=%d, username='%s',"
 				+ "name='%s', billing_address='%s', email_address='%s', phone_number='%s',"
-				+ "created_date='%t', last_updated_date='%t']",
-				id, userName, name.toString(), billingAddress.toString(), emailAddress.toString(),
+				+ "created_date='%tD', last_updated_date='%tD']",
+				id, username, name.toString(), billingAddress.toString(), emailAddress.toString(),
 				phoneNumber.toString(), createdDate, lastUpdatedDate);
 	}
 }

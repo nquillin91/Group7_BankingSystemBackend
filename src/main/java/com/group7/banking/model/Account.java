@@ -82,7 +82,7 @@ public class Account implements Serializable {
 	public String toString() {
 		return String.format(
 				"Account[id=%d, user_id=%d, account_type='%s', balance=%d,"
-				+ "status='%s', created_date='%t', last_updated_date='%t']",
+				+ "status='%s', created_date='%tD', last_updated_date='%tD']",
 				id, accountType, balance, status, createdDate, lastUpdatedDate);
 	}
 }

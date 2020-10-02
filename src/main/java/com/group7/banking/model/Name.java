@@ -51,7 +51,7 @@ public class Name  implements Serializable {
 	public String toString() {
 		return String.format(
 				"EmailAddress[id=%d, first_name='%s',"
-				+ "last_name='%s', created_date='%t', last_updated_date='%t']",
+				+ "last_name='%s', created_date='%tD', last_updated_date='%tD']",
 				id, firstName, lastName, createdDate, lastUpdatedDate);
 	}
 }

@@ -89,7 +89,7 @@ public class Transaction  implements Serializable {
 				"Transaction[id=%d, origin_account='%s',"
 				+ "target_account='%s', transactionType='%s', amount=%d,"
 				+ "comments='%s', status='%s'"
-				+ "created_date='%t', last_updated_date='%t']",
+				+ "created_date='%tD', last_updated_date='%tD']",
 				id, originAccount.getId(), targetAccount.getId(),
 				transactionType.toString(), amount, comments, status,
 				createdDate, lastUpdatedDate);
