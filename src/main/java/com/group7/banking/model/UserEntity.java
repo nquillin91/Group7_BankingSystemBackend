@@ -99,7 +99,7 @@ public class UserEntity implements UserDetails {
 	
 	@Getter
 	@Setter
-	@ManyToMany 
+	@ManyToMany(fetch = FetchType.EAGER)
     @JoinTable( 
         name = "users_roles", 
         joinColumns = @JoinColumn(
