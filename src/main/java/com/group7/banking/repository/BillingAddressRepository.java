@@ -7,6 +7,4 @@ import com.group7.banking.model.BillingAddressEntity;
 
 @Repository
 public interface BillingAddressRepository extends CrudRepository<BillingAddressEntity, Long> {
-
-  BillingAddressEntity findById(long id);
 }

@@ -8,11 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.group7.banking.service.BankingUserDetailsService;
 
 import lombok.AllArgsConstructor;
 
@@ -21,7 +23,7 @@ import lombok.AllArgsConstructor;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private BankingUserDetailsService bankingUserDetailsService;
 
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -44,14 +46,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		 * http.authorizeRequests() .antMatchers("/", "/login", "/sign-up").permitAll()
 		 * .and() .formLogin().loginPage("/login");
 		 */
+		http.sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+        
+		/*
+		 * http.cors().and().csrf().disable().authorizeRequests()
+		 * .antMatchers("/**").permitAll();
+		 */
 		
-		http.cors().and().csrf().disable().authorizeRequests()
-        .antMatchers("/**").permitAll();
+		/*
+		 * http.cors().and().csrf().disable() .authorizeRequests()
+		 * .antMatchers("/sign-up/**", "/login/**") .permitAll() .anyRequest()
+		 * .authenticated() .and() .formLogin() .permitAll();
+		 */
+		
+		http.cors().and().csrf().disable()
+		.authorizeRequests()
+        .antMatchers("/admin/**").hasRole("ADMIN")
+        .antMatchers("/sign-up/**", "/login/**").permitAll()
+        .antMatchers("/**").hasRole("USER")
+        .and()
+        .formLogin()
+        .loginProcessingUrl("/perform_login")
+        .and()
+        .logout()
+        .logoutUrl("/perform_logout")
+        .deleteCookies("JSESSIONID");
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService)
+		auth.userDetailsService(bankingUserDetailsService)
 				.passwordEncoder(bCryptPasswordEncoder);
 	}
 }

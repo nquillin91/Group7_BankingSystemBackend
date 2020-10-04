@@ -4,6 +4,7 @@ import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import com.group7.banking.model.EmailAddressEntity;
 import com.group7.banking.model.NameEntity;
 import com.group7.banking.model.PhoneNumberEntity;
 import com.group7.banking.model.ProvidedIncomeEntity;
+import com.group7.banking.model.RoleEntity;
 import com.group7.banking.model.SignUpRequest;
 import com.group7.banking.model.SsnEntity;
 import com.group7.banking.model.UserData;
@@ -30,6 +32,7 @@ import com.group7.banking.repository.EmailAddressRepository;
 import com.group7.banking.repository.NameRepository;
 import com.group7.banking.repository.PhoneNumberRepository;
 import com.group7.banking.repository.ProvidedIncomeRepository;
+import com.group7.banking.repository.RoleRepository;
 import com.group7.banking.repository.SSNRepository;
 import com.group7.banking.repository.UserRepository;
 
@@ -73,8 +76,37 @@ public class UserService {
     @Autowired
     private EmailSenderService emailSenderService;
     
+    @Autowired
+    private RoleRepository roleRepository;
+    
+    public UserData findById(Long userId) {
+    	UserData userData = new UserData();
+    	Optional<UserEntity> optionalUser = userRepository.findById(userId);
+    	
+    	if (optionalUser.isPresent()) {
+    		UserEntity user = optionalUser.get();
+    		
+    		userData.setUserName(user.getUsername());
+    		userData.setFirstName(user.getName().getFirstName());
+    		userData.setMiddleName(user.getName().getMiddleName());
+    		userData.setLastName(user.getName().getLastName());
+    	}
+    	
+    	return userData;
+    }
+    
+    public void deleteById(Long userId) {
+    	userRepository.deleteById(userId);
+    }
+    
     public UserData signUpUser(SignUpRequest signUpRequest) throws Exception {
     	UserEntity user = parseSignUpRequest(signUpRequest);
+    	
+    	Optional<RoleEntity> userRole = roleRepository.findByName("ROLE_USER");
+    	
+    	if (userRole.isPresent()) {
+    		user.setRoles(Arrays.asList(userRole.get()));
+    	}
     	
     	logger.debug(user.toString());
     	String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
@@ -180,28 +212,7 @@ public class UserService {
     	return false;
     }
     
-	public UserEntity loadUserByUsernameOrEmail(String usernameOrEmail) throws Exception {
-		final Optional<UserEntity> optionalUserByUsername = userRepository.findByUsername(usernameOrEmail);
-
-		if (optionalUserByUsername.isPresent()) {
-			return optionalUserByUsername.get();
-		}
-		else {
-			final Optional<UserEntity> optionalUserByEmail = userRepository.findByEmailAddress(usernameOrEmail);
-			
-			if (optionalUserByEmail.isPresent()) {
-				return optionalUserByEmail.get();
-			} else {
-				throw new Exception(MessageFormat.format("User with username or email {0} cannot be found.", usernameOrEmail));
-			}
-		}
-	}
-    
     public UserData getUserData(UserEntity userEntity) {
         return userEntityConverter.toResponse(userEntity);
-    }
-
-    public void deleteById(Long userId) {
-    	userRepository.deleteById(userId);
     }
 }

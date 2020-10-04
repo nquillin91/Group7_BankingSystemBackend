@@ -7,6 +7,4 @@ import com.group7.banking.model.NameEntity;
 
 @Repository
 public interface NameRepository extends CrudRepository<NameEntity, Long> {
-
-  NameEntity findById(long id);
 }

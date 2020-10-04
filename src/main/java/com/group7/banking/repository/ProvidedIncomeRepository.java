@@ -7,6 +7,4 @@ import com.group7.banking.model.ProvidedIncomeEntity;
 
 @Repository
 public interface ProvidedIncomeRepository extends CrudRepository<ProvidedIncomeEntity, Long> {
-
-  ProvidedIncomeEntity findById(long id);
 }

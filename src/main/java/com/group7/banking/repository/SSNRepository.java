@@ -7,6 +7,4 @@ import com.group7.banking.model.SsnEntity;
 
 @Repository
 public interface SSNRepository extends CrudRepository<SsnEntity, Long> {
-
-  SsnEntity findById(long id);
 }

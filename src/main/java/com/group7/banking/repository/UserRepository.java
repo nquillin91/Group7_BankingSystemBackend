@@ -9,7 +9,6 @@ import com.group7.banking.model.UserEntity;
 
 @Repository
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
-	Optional<UserEntity> findById(long id);
 	Optional<UserEntity> findByEmailAddress(String email);
 	Optional<UserEntity> findByUsername(String username);
 }

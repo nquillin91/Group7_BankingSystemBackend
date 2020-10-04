@@ -7,6 +7,4 @@ import com.group7.banking.model.EmailAddressEntity;
 
 @Repository
 public interface EmailAddressRepository extends CrudRepository<EmailAddressEntity, Long> {
-	
-  EmailAddressEntity findById(long id);
 }

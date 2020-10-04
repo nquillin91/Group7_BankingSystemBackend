@@ -1,9 +1,9 @@
 package com.group7.banking.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -14,9 +14,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -28,7 +33,7 @@ import lombok.ToString;
 @Table(name="users")
 @NoArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString
-public class UserEntity implements Serializable {
+public class UserEntity implements UserDetails {
 	private static final long serialVersionUID = -1229223520906444433L;
 
 	@Id
@@ -93,6 +98,17 @@ public class UserEntity implements Serializable {
 	
 	@Getter
 	@Setter
+	@ManyToMany 
+    @JoinTable( 
+        name = "users_roles", 
+        joinColumns = @JoinColumn(
+          name = "user_id", referencedColumnName = "id"), 
+        inverseJoinColumns = @JoinColumn(
+          name = "role_id", referencedColumnName = "id")) 
+    private Collection<RoleEntity> roles;
+	
+	@Getter
+	@Setter
 	@Column(name="enabled")
 	private Boolean enabled;
 	
@@ -116,5 +132,30 @@ public class UserEntity implements Serializable {
 	
 	public void addAccount(AccountEntity account) {
 		this.accounts.add(account);
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		return this.getEnabled();
 	}
 }
