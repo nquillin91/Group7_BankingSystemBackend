@@ -33,8 +33,8 @@ public class UserController {
 	}
     
     @GetMapping("/users/{id}")
-    public UserData getUser(@PathVariable Long userId) {
-    	return userService.findById(userId);
+    public UserData getUser(@PathVariable Long id) {
+    	return userService.findById(id);
     }
     
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
