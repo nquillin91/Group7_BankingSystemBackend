@@ -1,5 +1,7 @@
 package com.group7.banking.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.group7.banking.model.RoleEntity;
 import com.group7.banking.model.UserEntity;
 import com.group7.banking.repository.UserRepository;
 
@@ -31,7 +34,12 @@ public class BankingUserDetailsService implements UserDetailsService {
 		
 		builder = org.springframework.security.core.userdetails.User.withUsername(username);
 		builder.password(user.getPassword());
-		builder.roles(user.getRoles().toString());
+		
+		List<String> roles = new ArrayList<String>();
+		for (RoleEntity role : user.getRoles()) {
+			roles.add(role.getName().split("ROLE_")[1]);
+		}
+		builder.roles(roles.toArray(new String[roles.size()]));
 
 		return builder.build();
 	}
