@@ -1,27 +1,35 @@
 package com.group7.banking.service;
 
 import java.text.MessageFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.group7.banking.model.BillingAddress;
-import com.group7.banking.model.ConfirmationToken;
-import com.group7.banking.model.EmailAddress;
-import com.group7.banking.model.Name;
-import com.group7.banking.model.PhoneNumber;
-import com.group7.banking.model.SSN;
+import com.group7.banking.component.UserEntityConverter;
+import com.group7.banking.model.BillingAddressEntity;
+import com.group7.banking.model.ConfirmationTokenEntity;
+import com.group7.banking.model.EmailAddressEntity;
+import com.group7.banking.model.NameEntity;
+import com.group7.banking.model.PhoneNumberEntity;
+import com.group7.banking.model.ProvidedIncomeEntity;
 import com.group7.banking.model.SignUpRequest;
-import com.group7.banking.model.User;
+import com.group7.banking.model.SsnEntity;
+import com.group7.banking.model.UserData;
+import com.group7.banking.model.UserEntity;
 import com.group7.banking.repository.BillingAddressRepository;
 import com.group7.banking.repository.EmailAddressRepository;
 import com.group7.banking.repository.NameRepository;
 import com.group7.banking.repository.PhoneNumberRepository;
+import com.group7.banking.repository.ProvidedIncomeRepository;
 import com.group7.banking.repository.SSNRepository;
 import com.group7.banking.repository.UserRepository;
 
@@ -29,8 +37,14 @@ import com.group7.banking.repository.UserRepository;
 public class UserService {
 	Logger logger = LoggerFactory.getLogger(UserService.class);
 	
+	@Value("${app.host}")
+	private String appHost;
+	
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private UserEntityConverter userEntityConverter;
     
     @Autowired
     private BillingAddressRepository billingAddressRepository;
@@ -40,6 +54,9 @@ public class UserService {
     
     @Autowired
     private NameRepository nameRepository;
+    
+    @Autowired
+    private ProvidedIncomeRepository providedIncomeRepository;
     
     @Autowired
     private PhoneNumberRepository phoneNumberRepository;
@@ -56,48 +73,105 @@ public class UserService {
     @Autowired
     private EmailSenderService emailSenderService;
     
-    public void signUpUser(SignUpRequest signUpRequest) throws Exception {
-    	User user = parseSignUpRequest(signUpRequest);
+    public UserData signUpUser(SignUpRequest signUpRequest) throws Exception {
+    	UserEntity user = parseSignUpRequest(signUpRequest);
     	
     	logger.debug(user.toString());
-    	
     	String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
     	user.setPassword(encryptedPassword);
+    	
     	userRepository.save(user);
-
-    	final ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
+    	nameRepository.save(user.getName());
+    	providedIncomeRepository.save(user.getProvidedIncome());
+    	billingAddressRepository.save(user.getBillingAddress());
+    	emailAddressRepository.save(user.getEmailAddress());
+    	phoneNumberRepository.save(user.getPhoneNumber());
+    	ssnRepository.save(user.getSsn());
+    	
+    	ConfirmationTokenEntity confirmationToken = new ConfirmationTokenEntity(user);
+    	LocalDateTime expirationDate = confirmationTokenService.getExpirationDate(confirmationToken.getCreatedDate());
+    	confirmationToken.setExpirationDate(expirationDate);
+    	
     	confirmationTokenService.saveConfirmationToken(confirmationToken);
     	sendConfirmationMail(user.getEmailAddress(), confirmationToken.getConfirmationToken());
+    	
+    	return getUserData(user);
     }
     
-    private User parseSignUpRequest(SignUpRequest signUpRequest) throws Exception {
+    private UserEntity parseSignUpRequest(SignUpRequest signUpRequest) throws Exception {
     	if (doesUserExist(signUpRequest.getUsername())) {
     		throw new Exception(MessageFormat.format("Username - {0} - already exists.", signUpRequest.getUsername()));
     	}
     	
-    	Name nameA = new Name(signUpRequest.getFirstName(), signUpRequest.getLastName());
-    	nameRepository.save(nameA);
+    	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+    	LocalDate birthDate = LocalDate.parse(signUpRequest.getBirthDate(), formatter);
     	
-    	BillingAddress billing = new BillingAddress(signUpRequest.getAddressLine1(),
+    	UserEntity user = new UserEntity(signUpRequest.getUsername(), signUpRequest.getPassword(), birthDate);
+    	
+    	NameEntity name = new NameEntity(user, signUpRequest.getFirstName(), signUpRequest.getMiddleName(), signUpRequest.getLastName());
+    	user.setName(name);
+    	
+    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(user, signUpRequest.getProvidedIncome());
+    	user.setProvidedIncome(providedIncome);
+    	
+    	BillingAddressEntity billingAddress = new BillingAddressEntity(user, signUpRequest.getAddressLine1(),
     			signUpRequest.getAddressLine2(),
     			signUpRequest.getCity(), signUpRequest.getState(), signUpRequest.getZipcode());
-    	billingAddressRepository.save(billing);
+    	user.setBillingAddress(billingAddress);
     	
-    	EmailAddress email = new EmailAddress(signUpRequest.getEmailAddress());
-    	emailAddressRepository.save(email);
+    	EmailAddressEntity emailAddress = new EmailAddressEntity(user, signUpRequest.getEmailAddress());
+    	user.setEmailAddress(emailAddress);
     	
-    	PhoneNumber phoneNum = new PhoneNumber(signUpRequest.getPhoneNumber());
-    	phoneNumberRepository.save(phoneNum);
+    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpRequest.getPhoneNumber());
+    	user.setPhoneNumber(phoneNumber);
     	
-    	SSN ssn = new SSN(signUpRequest.getSsn());
-    	ssnRepository.save(ssn);
+    	SsnEntity ssn = new SsnEntity(user, signUpRequest.getSsn());
+    	user.setSsn(ssn);
     	
-    	return new User(signUpRequest.getUsername(), signUpRequest.getPassword(), nameA, billing, email, phoneNum, ssn);
+    	return user;
     }
     
+    private void sendConfirmationMail(EmailAddressEntity emailAddress, String token) {
+    	SimpleMailMessage mailMessage = new SimpleMailMessage();
+		mailMessage.setTo(emailAddress.getEmailAddress());
+		mailMessage.setSubject("Mail Confirmation Link!");
+		mailMessage.setFrom("<MAIL>");
+		mailMessage.setText("Thank you for registering. Please click on the "
+				+ "below link to activate your account."
+				+ appHost + "/sign-up/confirm?token=" + token);
+
+		emailSenderService.sendEmail(mailMessage);
+	}
+    
+    public void confirmUser(ConfirmationTokenEntity confirmationToken) throws Exception {
+    	Optional<UserEntity> optionalUser = userRepository.findById(confirmationToken.getUser().getId());
+    	
+    	if (confirmationToken.getExpirationDate().isAfter(LocalDateTime.now())) {
+    		if (optionalUser.isPresent()) {
+        		UserEntity user = optionalUser.get();
+        		user.setEnabled(true);
+        		
+            	userRepository.save(user);
+            	confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
+        	} else {
+        		throw new Exception(MessageFormat.format("Error confirming user {0} - not found.", confirmationToken.getUser().getId().toString()));
+        	}
+    	} else {
+    		confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
+    		
+    		ConfirmationTokenEntity newConfirmationToken = new ConfirmationTokenEntity(confirmationToken.getUser());
+        	LocalDateTime expirationDate = confirmationTokenService.getExpirationDate(newConfirmationToken.getCreatedDate());
+        	newConfirmationToken.setExpirationDate(expirationDate);
+        	
+        	confirmationTokenService.saveConfirmationToken(newConfirmationToken);
+        	sendConfirmationMail(newConfirmationToken.getUser().getEmailAddress(), newConfirmationToken.getConfirmationToken());
+        	
+        	throw new Exception("Confirmation token expired. Please check your email for a new token.");
+    	}
+	}
+    
     private boolean doesUserExist(String username) {
-    	Optional<User> optionalUser = userRepository.findByUsername(username);
+    	Optional<UserEntity> optionalUser = userRepository.findByUsername(username);
     	
     	if (optionalUser.isPresent()) {
     		return true;
@@ -106,40 +180,14 @@ public class UserService {
     	return false;
     }
     
-    private void sendConfirmationMail(EmailAddress emailAddress, String token) {
-    	SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(emailAddress.getEmailAddress());
-		mailMessage.setSubject("Mail Confirmation Link!");
-		mailMessage.setFrom("<MAIL>");
-		mailMessage.setText("Thank you for registering. Please click on the "
-				+ "below link to activate your account."
-				+ "http://localhost:8080/sign-up/confirm?token=" + token);
-
-		emailSenderService.sendEmail(mailMessage);
-	}
-    
-    public void confirmUser(ConfirmationToken confirmationToken) throws Exception {
-    	Optional<User> optionalUser = userRepository.findById(confirmationToken.getUserId());
-    	
-    	if (optionalUser.isPresent()) {
-    		User user = optionalUser.get();
-    		user.setEnabled(true);
-    		
-        	userRepository.save(user);
-        	confirmationTokenService.deleteConfirmationToken(confirmationToken.getId());
-    	} else {
-    		throw new Exception(MessageFormat.format("Error confirming user {0} - not found.", confirmationToken.getUserId().toString()));
-    	}
-	}
-    
-	public User loadUserByUsernameOrEmail(String usernameOrEmail) throws Exception {
-		final Optional<User> optionalUserByUsername = userRepository.findByUsername(usernameOrEmail);
+	public UserEntity loadUserByUsernameOrEmail(String usernameOrEmail) throws Exception {
+		final Optional<UserEntity> optionalUserByUsername = userRepository.findByUsername(usernameOrEmail);
 
 		if (optionalUserByUsername.isPresent()) {
 			return optionalUserByUsername.get();
 		}
 		else {
-			final Optional<User> optionalUserByEmail = userRepository.findByEmailAddress(usernameOrEmail);
+			final Optional<UserEntity> optionalUserByEmail = userRepository.findByEmailAddress(usernameOrEmail);
 			
 			if (optionalUserByEmail.isPresent()) {
 				return optionalUserByEmail.get();
@@ -148,6 +196,10 @@ public class UserService {
 			}
 		}
 	}
+    
+    public UserData getUserData(UserEntity userEntity) {
+        return userEntityConverter.toResponse(userEntity);
+    }
 
     public void deleteById(Long userId) {
     	userRepository.deleteById(userId);

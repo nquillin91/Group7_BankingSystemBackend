@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.group7.banking.model.Account;
+import com.group7.banking.model.AccountEntity;
 import com.group7.banking.repository.AccountRepository;
 
 @Service
@@ -29,11 +29,11 @@ public class EmailAddressService {
     	return "Cleared and re-initialized";
     }
     
-    public List<Account> findAll() {
+    public List<AccountEntity> findAll() {
 
-        Iterable<Account> it = accountRepository.findAll();
+        Iterable<AccountEntity> it = accountRepository.findAll();
 
-        ArrayList<Account> users = new ArrayList<Account>();
+        ArrayList<AccountEntity> users = new ArrayList<AccountEntity>();
         it.forEach(e -> {
         	users.add(e);
         });

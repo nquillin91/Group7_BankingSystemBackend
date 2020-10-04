@@ -1,22 +1,26 @@
 package com.group7.banking.service;
 
+import java.time.LocalDate;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.group7.banking.model.Account;
-import com.group7.banking.model.BillingAddress;
-import com.group7.banking.model.EmailAddress;
-import com.group7.banking.model.Name;
-import com.group7.banking.model.PhoneNumber;
-import com.group7.banking.model.SSN;
-import com.group7.banking.model.User;
+import com.group7.banking.model.AccountEntity;
+import com.group7.banking.model.BillingAddressEntity;
+import com.group7.banking.model.EmailAddressEntity;
+import com.group7.banking.model.NameEntity;
+import com.group7.banking.model.PhoneNumberEntity;
+import com.group7.banking.model.ProvidedIncomeEntity;
+import com.group7.banking.model.SsnEntity;
+import com.group7.banking.model.UserEntity;
 import com.group7.banking.repository.AccountRepository;
 import com.group7.banking.repository.BillingAddressRepository;
 import com.group7.banking.repository.EmailAddressRepository;
 import com.group7.banking.repository.NameRepository;
 import com.group7.banking.repository.PhoneNumberRepository;
+import com.group7.banking.repository.ProvidedIncomeRepository;
 import com.group7.banking.repository.SSNRepository;
 import com.group7.banking.repository.UserRepository;
 
@@ -37,6 +41,9 @@ public class MainService {
     private NameRepository nameRepository;
     
     @Autowired
+    private ProvidedIncomeRepository providedIncomeRepository;
+    
+    @Autowired
     private PhoneNumberRepository phoneNumberRepository;
     
     @Autowired
@@ -52,54 +59,73 @@ public class MainService {
     	logger.info("Initializing users");
     	
     	// -- Adding test user a --
-    	Name nameA = new Name("John-a", "Doe-a");
-    	nameRepository.save(nameA);
+    	UserEntity userA = new UserEntity("userA", "passA", LocalDate.now());
     	
-    	BillingAddress billingA = new BillingAddress("123 Abc Avenue A", "Apt 1",
+    	NameEntity nameA = new NameEntity(userA, "John-a", "", "Doe-a");
+    	userA.setName(nameA);
+    	
+    	ProvidedIncomeEntity providedIncomeA = new ProvidedIncomeEntity(userA, 70000);
+    	userA.setProvidedIncome(providedIncomeA);
+    	
+    	BillingAddressEntity billingA = new BillingAddressEntity(userA, "123 Abc Avenue A", "Apt 1",
     			"Chicago", "IL", "60602");
-    	billingAddressRepository.save(billingA);
+    	userA.setBillingAddress(billingA);
     	
-    	EmailAddress emailA = new EmailAddress("john.doeA@example.com");
-    	emailAddressRepository.save(emailA);
+    	EmailAddressEntity emailA = new EmailAddressEntity(userA, "john.doeA@example.com");
+    	userA.setEmailAddress(emailA);
     	
-    	PhoneNumber phoneNumA = new PhoneNumber("012-345-6780");
-    	phoneNumberRepository.save(phoneNumA);
+    	PhoneNumberEntity phoneNumA = new PhoneNumberEntity(userA, "012-345-6780");
+    	userA.setPhoneNumber(phoneNumA);
     	
-    	SSN ssnA = new SSN("123-a");
-    	ssnRepository.save(ssnA);
+    	SsnEntity ssnA = new SsnEntity(userA, "123-a");
+    	userA.setSsn(ssnA);
     	
-    	User userA = new User("userA", "passA", nameA, billingA, emailA, phoneNumA, ssnA);
-    	userRepository.save(userA);
-    	Account accountA = new Account(userA, Account.Type.CHECKING, 100.0);
+    	AccountEntity accountA = new AccountEntity(userA, AccountEntity.Type.CHECKING, 100.0);
     	userA.addAccount(accountA);
+    	
     	userRepository.save(userA);
+    	nameRepository.save(nameA);
+    	providedIncomeRepository.save(providedIncomeA);
+    	billingAddressRepository.save(billingA);
+    	emailAddressRepository.save(emailA);
+    	phoneNumberRepository.save(phoneNumA);
+    	ssnRepository.save(ssnA);
     	accountRepository.save(accountA);
     	
     	// -- Adding test user b --
-    	Name nameB = new Name("John-b", "Doe-b");
-    	nameRepository.save(nameB);
+    	UserEntity userB = new UserEntity("userB", "passB", LocalDate.now());
     	
-    	BillingAddress billingB = new BillingAddress("123 Abc Avenue B", "",
+    	NameEntity nameB = new NameEntity(userB, "John-b", "", "Doe-b");
+    	userB.setName(nameB);
+    	
+    	ProvidedIncomeEntity providedIncomeB = new ProvidedIncomeEntity(userB, 145000);
+    	userB.setProvidedIncome(providedIncomeB);
+    	
+    	BillingAddressEntity billingAddressB = new BillingAddressEntity(userB, "123 Abc Avenue B", "Apt 1",
     			"Chicago", "IL", "60602");
-    	billingAddressRepository.save(billingB);
+    	userB.setBillingAddress(billingAddressB);
     	
-    	EmailAddress emailB = new EmailAddress("john.doeB@example.com");
-    	emailAddressRepository.save(emailB);
+    	EmailAddressEntity emailB = new EmailAddressEntity(userB, "john.doeB@example.com");
+    	userB.setEmailAddress(emailB);
     	
-    	PhoneNumber phoneNumB = new PhoneNumber("012-345-6789");
-    	phoneNumberRepository.save(phoneNumB);
+    	PhoneNumberEntity phoneNumB = new PhoneNumberEntity(userB, "012-345-6781");
+    	userB.setPhoneNumber(phoneNumB);
     	
-    	SSN ssnB = new SSN("123-b");
-    	ssnRepository.save(ssnB);
+    	SsnEntity ssnB = new SsnEntity(userB, "123-a");
+    	userB.setSsn(ssnB);
     	
-    	User userB = new User("userB", "passB", nameB, billingB, emailB, phoneNumB, ssnB);
-    	userRepository.save(userB);
-    	Account accountBChecking = new Account(userB, Account.Type.CHECKING, 50.0);
+    	AccountEntity accountBChecking = new AccountEntity(userB, AccountEntity.Type.CHECKING, 50.0);
     	userB.addAccount(accountBChecking);
-    	Account accountBSavings = new Account(userB, Account.Type.SAVINGS, 1000.0);
+    	AccountEntity accountBSavings = new AccountEntity(userB, AccountEntity.Type.SAVINGS, 1000.0);
     	userB.addAccount(accountBSavings);
     	
     	userRepository.save(userB);
+    	nameRepository.save(nameB);
+    	providedIncomeRepository.save(providedIncomeB);
+    	billingAddressRepository.save(billingAddressB);
+    	emailAddressRepository.save(emailB);
+    	phoneNumberRepository.save(phoneNumB);
+    	ssnRepository.save(ssnB);
     	accountRepository.save(accountBChecking);
     	accountRepository.save(accountBSavings);
     	

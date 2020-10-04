@@ -9,9 +9,11 @@ public class SignUpRequest {
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private String birthDate;
+	private String ssn;
+	private Float providedIncome;
 	private String phoneNumber;
 	private String emailAddress;
-	private String ssn;
 	private String addressLine1;
 	private String addressLine2;
 	private String city;

@@ -1,7 +1,7 @@
 package com.group7.banking.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -10,14 +10,21 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name="accounts")
-public class Account implements Serializable {
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
+@ToString
+public class AccountEntity implements Serializable {
 	private static final long serialVersionUID = 6396870377766385323L;
 	
 	private static enum Status {
@@ -36,8 +43,9 @@ public class Account implements Serializable {
 	private Long id;
 	
 	@Getter
-	@Column(name="user_id")
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+	@ToString.Exclude private UserEntity user;
 	
 	@Getter
 	@Column(name="account_type")
@@ -52,37 +60,27 @@ public class Account implements Serializable {
 	@Getter
 	@Column(name="outgoing_transactions")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "originAccount")
-	private List<Transaction> outgoingTransactions;
+	private List<TransactionEntity> outgoingTransactions;
 	
 	@Getter
 	@Column(name="incoming_transactions")
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "targetAccount")
-	private List<Transaction> incomingTransactions;
+	private List<TransactionEntity> incomingTransactions;
 	
 	@Getter
 	@Column(name="created_date")
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	
 	@Getter
 	@Column(name="last_updated_date")
-	private Date lastUpdatedDate;
+	private LocalDateTime lastUpdatedDate;
 
-	protected Account() {}
-
-	public Account(User user, Type accountType, Double startingBalance) {
-		this.userId = user.getId();
+	public AccountEntity(UserEntity user, Type accountType, Double startingBalance) {
+		this.user = user;
 		this.accountType = accountType;
 		this.balance = startingBalance;
 		this.status = Status.ACTIVE;
-		this.createdDate = new Date();
-		this.lastUpdatedDate = new Date();
-	}
-
-	@Override
-	public String toString() {
-		return String.format(
-				"Account[id=%d, user_id=%d, account_type='%s', balance=%d,"
-				+ "status='%s', created_date='%tD', last_updated_date='%tD']",
-				id, accountType, balance, status, createdDate, lastUpdatedDate);
+		this.createdDate = LocalDateTime.now();
+		this.lastUpdatedDate = LocalDateTime.now();
 	}
 }

@@ -3,10 +3,10 @@ package com.group7.banking.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.group7.banking.model.PhoneNumber;
+import com.group7.banking.model.PhoneNumberEntity;
 
 @Repository
-public interface PhoneNumberRepository extends CrudRepository<PhoneNumber, Long> {
+public interface PhoneNumberRepository extends CrudRepository<PhoneNumberEntity, Long> {
 	
-  PhoneNumber findById(long id);
+  PhoneNumberEntity findById(long id);
 }

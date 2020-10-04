@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group7.banking.model.ConfirmationToken;
+import com.group7.banking.model.ConfirmationTokenEntity;
 import com.group7.banking.model.SignUpRequest;
+import com.group7.banking.model.UserData;
 import com.group7.banking.service.ConfirmationTokenService;
 import com.group7.banking.service.UserService;
 
@@ -31,23 +32,25 @@ public class UserController {
 	}
     
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String signUp(@RequestBody SignUpRequest signUpRequest) {
-		try {
-			userService.signUpUser(signUpRequest);
+	public UserData signUp(@RequestBody SignUpRequest signUpRequest) {
+		UserData userData = new UserData();
+		
+    	try {
+			userData = userService.signUpUser(signUpRequest);
 		} catch (Exception e) {
-			return e.getMessage();
+			e.printStackTrace();
 		}
 		
-		return "Successfully signed up!";
+		return userData;
 	}
 
 	@GetMapping("/sign-up/confirm")
 	public String confirmMail(@RequestParam("token") String token) {
 
-		Optional<ConfirmationToken> optionalConfirmationToken = confirmationTokenService.findConfirmationTokenByToken(token);
+		Optional<ConfirmationTokenEntity> optionalConfirmationToken = confirmationTokenService.findConfirmationTokenByToken(token);
 
 		if(optionalConfirmationToken.isPresent()) {
-			ConfirmationToken confirmationToken = optionalConfirmationToken.get();
+			ConfirmationTokenEntity confirmationToken = optionalConfirmationToken.get();
 
 			try {
 				userService.confirmUser(confirmationToken);

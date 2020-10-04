@@ -1,7 +1,7 @@
 package com.group7.banking.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,12 +13,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name="transactions")
-public class Transaction  implements Serializable {
+@NoArgsConstructor(access=AccessLevel.PROTECTED)
+@ToString
+public class TransactionEntity  implements Serializable {
 	private static final long serialVersionUID = -665585428167785747L;
 
 	private enum Type {
@@ -40,12 +45,12 @@ public class Transaction  implements Serializable {
 	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "origin_account_id", referencedColumnName = "id")
-	private Account originAccount;
+	private AccountEntity originAccount;
 	
 	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "target_account_id", referencedColumnName = "id")
-	private Account targetAccount;
+	private AccountEntity targetAccount;
 	
 	@Getter
 	private Type transactionType;
@@ -62,16 +67,14 @@ public class Transaction  implements Serializable {
 	
 	@Getter
 	@Column(name = "created_date")
-	private Date createdDate;
+	private LocalDateTime createdDate;
 	
 	@Getter
 	@Setter
 	@Column(name = "last_updated_date")
-	private Date lastUpdatedDate;
-	
-	protected Transaction() {}
+	private LocalDateTime lastUpdatedDate;
 
-	public Transaction(Account originAccount, Account targetAccount, Type transactionType, 
+	public TransactionEntity(AccountEntity originAccount, AccountEntity targetAccount, Type transactionType, 
 			Double amount, String comments) {
 		this.originAccount = originAccount;
 		this.targetAccount = targetAccount;
@@ -79,19 +82,7 @@ public class Transaction  implements Serializable {
 		this.amount = amount;
 		this.comments = comments;
 		this.status = Status.PENDING;
-		this.createdDate = new Date();
-		this.lastUpdatedDate = new Date();
-	}
-
-	@Override
-	public String toString() {
-		return String.format(
-				"Transaction[id=%d, origin_account='%s',"
-				+ "target_account='%s', transactionType='%s', amount=%d,"
-				+ "comments='%s', status='%s'"
-				+ "created_date='%tD', last_updated_date='%tD']",
-				id, originAccount.getId(), targetAccount.getId(),
-				transactionType.toString(), amount, comments, status,
-				createdDate, lastUpdatedDate);
+		this.createdDate = LocalDateTime.now();
+		this.lastUpdatedDate = LocalDateTime.now();
 	}
 }

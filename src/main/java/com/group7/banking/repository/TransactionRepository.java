@@ -3,11 +3,11 @@ package com.group7.banking.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.group7.banking.model.Account;
-import com.group7.banking.model.Transaction;
+import com.group7.banking.model.AccountEntity;
+import com.group7.banking.model.TransactionEntity;
 
 @Repository
-public interface TransactionRepository extends CrudRepository<Account, Long> {
+public interface TransactionRepository extends CrudRepository<AccountEntity, Long> {
 
-  Transaction findById(long id);
+  TransactionEntity findById(long id);
 }
