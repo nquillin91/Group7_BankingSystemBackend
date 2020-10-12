@@ -1,9 +1,9 @@
-package com.group7.banking.model;
+package com.group7.banking.dto;
 
 import lombok.Data;
 
 @Data
-public class SignUpRequest {
+public class SignUpDTO {
 	private String username;
 	private String password;
 	private String firstName;
