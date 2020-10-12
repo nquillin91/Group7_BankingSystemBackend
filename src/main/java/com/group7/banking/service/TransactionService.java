@@ -17,37 +17,39 @@ public class TransactionService {
 	
     @Autowired
     private AccountRepository accountRepository;
+//    
+//    public String clearAndInit() {
+//    	logger.info("Clearing all data");
+//    	accountRepository.deleteAll();
+//    	
+//    	logger.info("Initializing users");
+//    	
+//    	
+//    	
+//    	return "Cleared and re-initialized";
+//    }
+//    
+   
     
-    public String clearAndInit() {
-    	logger.info("Clearing all data");
-    	accountRepository.deleteAll();
+    
+    
+//    If bal>send money: send money
+     void sendMoney() {
     	
-    	logger.info("Initializing users");
+    }
+//  To check is balance> send money
+    public void validateTransaction() {
     	
-    	
-    	
-    	return "Cleared and re-initialized";
     }
     
-    public List<AccountEntity> findAll() {
-
-        Iterable<AccountEntity> it = accountRepository.findAll();
-
-        ArrayList<AccountEntity> users = new ArrayList<AccountEntity>();
-        it.forEach(e -> {
-        	users.add(e);
-        });
-
-        return users;
+// TODO:  Get beneficiary
+    public void getBeneficiary() {
+    	
     }
-
-    public Long count() {
-
-        return accountRepository.count();
-    }
-
-    public void deleteById(Long userId) {
-
-    	accountRepository.deleteById(userId);
-    }
+    
+    
+    
+    
+    
+    
 }
