@@ -16,6 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.group7.banking.component.UserEntityConverter;
+import com.group7.banking.dto.SignUpDTO;
+import com.group7.banking.dto.UserDTO;
 import com.group7.banking.model.BillingAddressEntity;
 import com.group7.banking.model.ConfirmationTokenEntity;
 import com.group7.banking.model.EmailAddressEntity;
@@ -23,9 +25,7 @@ import com.group7.banking.model.NameEntity;
 import com.group7.banking.model.PhoneNumberEntity;
 import com.group7.banking.model.ProvidedIncomeEntity;
 import com.group7.banking.model.RoleEntity;
-import com.group7.banking.model.SignUpRequest;
 import com.group7.banking.model.SsnEntity;
-import com.group7.banking.model.UserData;
 import com.group7.banking.model.UserEntity;
 import com.group7.banking.repository.BillingAddressRepository;
 import com.group7.banking.repository.EmailAddressRepository;
@@ -79,8 +79,8 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
     
-    public UserData findById(Long userId) {
-    	UserData userData = new UserData();
+    public UserDTO findById(Long userId) {
+    	UserDTO userData = new UserDTO();
     	Optional<UserEntity> optionalUser = userRepository.findById(userId);
     	
     	if (optionalUser.isPresent()) {
@@ -99,8 +99,8 @@ public class UserService {
     	userRepository.deleteById(userId);
     }
     
-    public UserData signUpUser(SignUpRequest signUpRequest) throws Exception {
-    	UserEntity user = parseSignUpRequest(signUpRequest);
+    public UserDTO signUpUser(SignUpDTO signUpDto) throws Exception {
+    	UserEntity user = parseSignUpRequest(signUpDto);
     	
     	Optional<RoleEntity> userRole = roleRepository.findByName("ROLE_USER");
     	
@@ -130,34 +130,34 @@ public class UserService {
     	return getUserData(user);
     }
     
-    private UserEntity parseSignUpRequest(SignUpRequest signUpRequest) throws Exception {
-    	if (doesUserExist(signUpRequest.getUsername())) {
-    		throw new Exception(MessageFormat.format("Username - {0} - already exists.", signUpRequest.getUsername()));
+    private UserEntity parseSignUpRequest(SignUpDTO signUpDto) throws Exception {
+    	if (doesUserExist(signUpDto.getUsername())) {
+    		throw new Exception(MessageFormat.format("Username - {0} - already exists.", signUpDto.getUsername()));
     	}
     	
     	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-    	LocalDate birthDate = LocalDate.parse(signUpRequest.getBirthDate(), formatter);
+    	LocalDate birthDate = LocalDate.parse(signUpDto.getBirthDate(), formatter);
     	
-    	UserEntity user = new UserEntity(signUpRequest.getUsername(), signUpRequest.getPassword(), birthDate);
+    	UserEntity user = new UserEntity(signUpDto.getUsername(), signUpDto.getPassword(), birthDate);
     	
-    	NameEntity name = new NameEntity(user, signUpRequest.getFirstName(), signUpRequest.getMiddleName(), signUpRequest.getLastName());
+    	NameEntity name = new NameEntity(user, signUpDto.getFirstName(), signUpDto.getMiddleName(), signUpDto.getLastName());
     	user.setName(name);
     	
-    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(user, signUpRequest.getProvidedIncome());
+    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(user, signUpDto.getProvidedIncome());
     	user.setProvidedIncome(providedIncome);
     	
-    	BillingAddressEntity billingAddress = new BillingAddressEntity(user, signUpRequest.getAddressLine1(),
-    			signUpRequest.getAddressLine2(),
-    			signUpRequest.getCity(), signUpRequest.getState(), signUpRequest.getZipcode());
+    	BillingAddressEntity billingAddress = new BillingAddressEntity(user, signUpDto.getAddressLine1(),
+    			signUpDto.getAddressLine2(),
+    			signUpDto.getCity(), signUpDto.getState(), signUpDto.getZipcode());
     	user.setBillingAddress(billingAddress);
     	
-    	EmailAddressEntity emailAddress = new EmailAddressEntity(user, signUpRequest.getEmailAddress());
+    	EmailAddressEntity emailAddress = new EmailAddressEntity(user, signUpDto.getEmailAddress());
     	user.setEmailAddress(emailAddress);
     	
-    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpRequest.getPhoneNumber());
+    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpDto.getPhoneNumber());
     	user.setPhoneNumber(phoneNumber);
     	
-    	SsnEntity ssn = new SsnEntity(user, signUpRequest.getSsn());
+    	SsnEntity ssn = new SsnEntity(user, signUpDto.getSsn());
     	user.setSsn(ssn);
     	
     	return user;
@@ -212,7 +212,7 @@ public class UserService {
     	return false;
     }
     
-    public UserData getUserData(UserEntity userEntity) {
+    public UserDTO getUserData(UserEntity userEntity) {
         return userEntityConverter.toResponse(userEntity);
     }
 }

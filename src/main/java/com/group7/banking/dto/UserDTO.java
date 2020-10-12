@@ -1,9 +1,9 @@
-package com.group7.banking.model;
+package com.group7.banking.dto;
 
 import lombok.Data;
 
 @Data
-public class UserData {
+public class UserDTO {
 	private String userName;
 	private String firstName;
 	private String middleName;

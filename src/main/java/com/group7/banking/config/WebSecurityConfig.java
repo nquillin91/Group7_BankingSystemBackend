@@ -3,6 +3,7 @@ package com.group7.banking.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -16,11 +17,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.group7.banking.service.BankingUserDetailsService;
 
-import lombok.AllArgsConstructor;
-
 @Configuration
-@AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Value("${app.local.instance}")
+	private boolean isLocalInstance;
 	
 	@Autowired
 	private BankingUserDetailsService bankingUserDetailsService;
@@ -42,36 +43,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		/*
-		 * http.authorizeRequests() .antMatchers("/", "/login", "/sign-up").permitAll()
-		 * .and() .formLogin().loginPage("/login");
-		 */
 		http.sessionManagement()
         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
         
-		/*
-		 * http.cors().and().csrf().disable().authorizeRequests()
-		 * .antMatchers("/**").permitAll();
-		 */
-		
-		/*
-		 * http.cors().and().csrf().disable() .authorizeRequests()
-		 * .antMatchers("/sign-up/**", "/login/**") .permitAll() .anyRequest()
-		 * .authenticated() .and() .formLogin() .permitAll();
-		 */
-		
-		http.cors().and().csrf().disable()
-		.authorizeRequests()
-		.antMatchers("/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-        .antMatchers("/admin/**").hasRole("ADMIN")
-        .antMatchers("/sign-up/**", "/login/**").permitAll()
-        .and()
-        .formLogin()
-        .loginProcessingUrl("/perform_login")
-        .and()
-        .logout()
-        .logoutUrl("/perform_logout")
-        .deleteCookies("JSESSIONID");
+		if (isLocalInstance) {
+			http.cors().and().csrf().disable().authorizeRequests()
+			  .antMatchers("/**").permitAll();
+		} else {
+			http.cors().and().csrf().disable()
+			.authorizeRequests()
+			.antMatchers("/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
+	        .antMatchers("/admin/**").hasRole("ADMIN")
+	        .antMatchers("/sign-up/**", "/login/**").permitAll()
+	        .and()
+	        .formLogin()
+	        .loginProcessingUrl("/perform_login")
+	        .and()
+	        .logout()
+	        .logoutUrl("/perform_logout")
+	        .deleteCookies("JSESSIONID");
+		} 
 	}
 
 	@Autowired
