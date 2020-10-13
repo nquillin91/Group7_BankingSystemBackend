@@ -1,5 +1,11 @@
 package com.group7.banking.component;
 
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 import com.group7.banking.dto.UserDTO;
