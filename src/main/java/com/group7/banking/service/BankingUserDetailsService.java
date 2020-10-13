@@ -11,9 +11,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.group7.banking.model.RoleEntity;
-import com.group7.banking.model.UserEntity;
-import com.group7.banking.repository.UserRepository;
+import com.group7.banking.model.sql.RoleEntity;
+import com.group7.banking.model.sql.UserEntity;
+import com.group7.banking.repository.sql.UserRepository;
 
 @Service
 public class BankingUserDetailsService implements UserDetailsService {

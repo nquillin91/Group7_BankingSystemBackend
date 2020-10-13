@@ -3,8 +3,8 @@ package com.group7.banking.component;
 import org.springframework.stereotype.Component;
 
 import com.group7.banking.dto.UserDTO;
-import com.group7.banking.model.NameEntity;
-import com.group7.banking.model.UserEntity;
+import com.group7.banking.model.sql.NameEntity;
+import com.group7.banking.model.sql.UserEntity;
 
 @Component
 public class UserEntityConverter {

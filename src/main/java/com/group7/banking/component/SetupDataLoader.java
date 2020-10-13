@@ -1,10 +1,9 @@
 package com.group7.banking.component;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -14,15 +13,15 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.group7.banking.model.EmailAddressEntity;
-import com.group7.banking.model.NameEntity;
-import com.group7.banking.model.PrivilegeEntity;
-import com.group7.banking.model.RoleEntity;
-import com.group7.banking.model.UserEntity;
-import com.group7.banking.repository.NameRepository;
-import com.group7.banking.repository.PrivilegeRepository;
-import com.group7.banking.repository.RoleRepository;
-import com.group7.banking.repository.UserRepository;
+import com.group7.banking.model.sql.EmailAddressEntity;
+import com.group7.banking.model.sql.NameEntity;
+import com.group7.banking.model.sql.PrivilegeEntity;
+import com.group7.banking.model.sql.RoleEntity;
+import com.group7.banking.model.sql.UserEntity;
+import com.group7.banking.repository.sql.NameRepository;
+import com.group7.banking.repository.sql.PrivilegeRepository;
+import com.group7.banking.repository.sql.RoleRepository;
+import com.group7.banking.repository.sql.UserRepository;
 
 @Component
 public class SetupDataLoader implements
@@ -63,15 +62,22 @@ public class SetupDataLoader implements
     	PrivilegeEntity readPrivilege = createPrivilegeIfNotFound("READ_PRIVILEGE");
     	PrivilegeEntity writePrivilege = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
     	
-    	List<PrivilegeEntity> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege);        
+    	Set<PrivilegeEntity> adminPrivileges = new HashSet<PrivilegeEntity>();
+    	adminPrivileges.add(readPrivilege);
+    	adminPrivileges.add(writePrivilege);
+    	
+    	Set<PrivilegeEntity> userPrivileges = new HashSet<PrivilegeEntity>();
+    	userPrivileges.add(readPrivilege);
     	
     	createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-    	createRoleIfNotFound("ROLE_USER", Arrays.asList(readPrivilege));
+    	createRoleIfNotFound("ROLE_USER", userPrivileges);
     	
     	Optional<RoleEntity> adminRole = roleRepository.findByName("ROLE_ADMIN");
     	
     	if (adminRole.isPresent()) {
-    		user.setRoles(Arrays.asList(adminRole.get()));
+    		Set<RoleEntity> roles = new HashSet<RoleEntity>();
+    		roles.add(adminRole.get());
+    		user.setRoles(roles);
     	}
     	
     	NameEntity name = new NameEntity(user, "Admin", "", "");
@@ -81,8 +87,8 @@ public class SetupDataLoader implements
     	user.setEmailAddress(email);
         user.setEnabled(true);
     	
+        nameRepository.save(name);
     	userRepository.save(user);
-    	nameRepository.save(name);
     }
  
     @Transactional
@@ -99,7 +105,7 @@ public class SetupDataLoader implements
     }
  
     @Transactional
-    RoleEntity createRoleIfNotFound(String name, Collection<PrivilegeEntity> privileges) {
+    RoleEntity createRoleIfNotFound(String name, Set<PrivilegeEntity> privileges) {
     	RoleEntity role = new RoleEntity();
     	Optional<RoleEntity> optionalRole = roleRepository.findByName(name);
         

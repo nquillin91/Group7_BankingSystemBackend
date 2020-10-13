@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group7.banking.model.AccountEntity;
-import com.group7.banking.service.AccountService;
+import com.group7.banking.model.sql.AccountEntity;
+import com.group7.banking.service.sql.AccountService;
 
 @RestController("AccountController")
 public class AccountController {

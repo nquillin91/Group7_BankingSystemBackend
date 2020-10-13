@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.group7.banking.service.MainService;
+import com.group7.banking.service.sql.MainService;
 
 @RestController("MainController")
 public class MainController {

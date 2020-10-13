@@ -1,7 +1,7 @@
 package com.group7.banking.controller;
 
 import java.text.MessageFormat;
-import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
-import com.group7.banking.model.ConfirmationTokenEntity;
-import com.group7.banking.service.ConfirmationTokenService;
-import com.group7.banking.service.UserService;
+import com.group7.banking.model.nosql.ConfirmationTokenEntity;
+import com.group7.banking.service.nosql.ConfirmationTokenService;
+import com.group7.banking.service.sql.UserService;
 
 @RestController("UserController")
 public class UserController {
@@ -43,10 +43,10 @@ public class UserController {
 	@GetMapping("/sign-up/confirm")
 	public String confirmMail(@RequestParam("token") String token) throws Exception {
 
-		Optional<ConfirmationTokenEntity> optionalConfirmationToken = confirmationTokenService.findConfirmationTokenByToken(token);
+		List<ConfirmationTokenEntity> searchResult = confirmationTokenService.findConfirmationTokenByToken(token);
 
-		if(optionalConfirmationToken.isPresent()) {
-			ConfirmationTokenEntity confirmationToken = optionalConfirmationToken.get();
+		if(searchResult.size() == 1) {
+			ConfirmationTokenEntity confirmationToken = searchResult.get(0);
 			userService.confirmUser(confirmationToken);
 				
 			return "Successfully confirmed! Thank you for signing up!";
