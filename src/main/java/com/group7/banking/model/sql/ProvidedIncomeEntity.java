@@ -3,7 +3,6 @@ package com.group7.banking.model.sql;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -31,7 +30,7 @@ public class ProvidedIncomeEntity  implements Serializable {
 	private Long id;
 	
 	@Getter
-	@OneToOne(cascade = CascadeType.ALL, mappedBy = "providedIncome")
+	@OneToOne(mappedBy = "providedIncome")
 	@ToString.Exclude private UserEntity user;
 	
 	@Getter

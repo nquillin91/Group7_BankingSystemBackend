@@ -55,12 +55,6 @@ public class UserEntity implements UserDetails {
 	private String password;
 	
 	@Getter
-	@Setter
-	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "name_id", referencedColumnName = "id")
-	private NameEntity name;
-	
-	@Getter
 	@Column(name="birthdate")
 	private LocalDate birthdate;
 	
@@ -75,12 +69,6 @@ public class UserEntity implements UserDetails {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "billing_address_id", referencedColumnName = "id")
 	private BillingAddressEntity billingAddress;
-	
-	@Getter
-	@Setter
-	@OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "email_address_id", referencedColumnName = "id")
-	private EmailAddressEntity emailAddress;
 	
 	@Getter
 	@Setter
@@ -102,7 +90,7 @@ public class UserEntity implements UserDetails {
 	
 	@Getter
 	@Setter
-	@ManyToMany
+	@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable( 
         name = "users_roles", 
         joinColumns = @JoinColumn(

@@ -13,12 +13,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.group7.banking.model.sql.EmailAddressEntity;
-import com.group7.banking.model.sql.NameEntity;
+import com.group7.banking.model.nosql.EmailAddressEntity;
+import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.sql.PrivilegeEntity;
 import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.UserEntity;
-import com.group7.banking.repository.sql.NameRepository;
+import com.group7.banking.repository.nosql.ConfirmationTokenRepository;
+import com.group7.banking.repository.nosql.EmailAddressRepository;
+import com.group7.banking.repository.nosql.NameRepository;
 import com.group7.banking.repository.sql.PrivilegeRepository;
 import com.group7.banking.repository.sql.RoleRepository;
 import com.group7.banking.repository.sql.UserRepository;
@@ -34,12 +36,18 @@ public class SetupDataLoader implements
     
     @Autowired
     private NameRepository nameRepository;
+    
+    @Autowired
+    private EmailAddressRepository emailAddressRepository;
  
     @Autowired
     private RoleRepository roleRepository;
  
     @Autowired
     private PrivilegeRepository privilegeRepository;
+    
+    @Autowired
+    private ConfirmationTokenRepository confirmationTokenRepository;
  
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -50,6 +58,10 @@ public class SetupDataLoader implements
  
         if (alreadySetup)
             return;
+        
+        nameRepository.deleteAll();
+        emailAddressRepository.deleteAll();
+        confirmationTokenRepository.deleteAll();
         
         createAdminUser();
  
@@ -79,16 +91,14 @@ public class SetupDataLoader implements
     		roles.add(adminRole.get());
     		user.setRoles(roles);
     	}
+    	user.setEnabled(true);
+    	userRepository.save(user);
     	
-    	NameEntity name = new NameEntity(user, "Admin", "", "");
-    	user.setName(name);
-    	
-    	EmailAddressEntity email = new EmailAddressEntity(user, "admin@admin.com");
-    	user.setEmailAddress(email);
-        user.setEnabled(true);
+    	NameEntity name = new NameEntity(user.getId(), "Admin", "", "");
+    	EmailAddressEntity email = new EmailAddressEntity(user.getId(), "admin@admin.com");
     	
         nameRepository.save(name);
-    	userRepository.save(user);
+        emailAddressRepository.save(email);
     }
  
     @Transactional
