@@ -16,10 +16,10 @@ public class AccountController {
     private AccountService accountService;
 
     @GetMapping("/accounts/{id}")
-    public AccountEntity get(@PathVariable String id) {
+    public AccountEntity get(@PathVariable long id) {
 
-        Long accountID = Long.parseLong(id);
-        return accountService.findById(accountID);
+       
+        return accountService.findById(id);
     }
     
     @DeleteMapping("/accounts/{id}")

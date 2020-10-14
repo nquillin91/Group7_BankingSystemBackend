@@ -15,35 +15,36 @@ import com.group7.banking.repository.sql.AccountRepository;
 @Service
 public class AccountService {
 	Logger logger = LoggerFactory.getLogger(AccountService.class);
-	
-    @Autowired
-    private AccountRepository accountRepository;
-    
-    public AccountEntity findById(long id) {
-    	Optional<AccountEntity> optionalAccount = accountRepository.findById(id);
-    	
-    	return optionalAccount.get();
-    }
-    
-    public List<AccountEntity> findAll() {
 
-        Iterable<AccountEntity> it = accountRepository.findAll();
+	@Autowired
+	private AccountRepository accountRepository;
 
-        ArrayList<AccountEntity> users = new ArrayList<AccountEntity>();
-        it.forEach(e -> {
-        	users.add(e);
-        });
+	public AccountEntity findById(long id) {
+		Optional<AccountEntity> optionalAccount = accountRepository.findById(id);
 
-        return users;
-    }
+		return optionalAccount.get();
+	}
 
-    public Long count() {
+	public List<AccountEntity> findAll() {
 
-        return accountRepository.count();
-    }
+		Iterable<AccountEntity> it = accountRepository.findAll();
 
-    public void deleteById(Long userId) {
+		ArrayList<AccountEntity> users = new ArrayList<AccountEntity>();
+		it.forEach(e -> {
+			users.add(e);
+		});
 
-    	accountRepository.deleteById(userId);
-    }
+		return users;
+	}
+
+	public Long count() {
+
+		return accountRepository.count();
+	}
+
+	public void deleteById(Long userId) {
+
+		accountRepository.deleteById(userId);
+	}
+
 }

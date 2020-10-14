@@ -4,21 +4,19 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.sql.EmailAddressEntity;
-import com.group7.banking.model.sql.NameEntity;
 import com.group7.banking.model.sql.PrivilegeEntity;
 import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.UserEntity;
-import com.group7.banking.repository.sql.NameRepository;
+import com.group7.banking.repository.nosql.NameRepository;
 import com.group7.banking.repository.sql.PrivilegeRepository;
 import com.group7.banking.repository.sql.RoleRepository;
 import com.group7.banking.repository.sql.UserRepository;
@@ -80,14 +78,14 @@ public class SetupDataLoader implements
     		user.setRoles(roles);
     	}
     	
-    	NameEntity name = new NameEntity(user, "Admin", "", "");
-    	user.setName(name);
-    	
+//    	NameEntity name = new NameEntity(user, "Admin", "", "");
+//    	user.setName(name);
+//    	
     	EmailAddressEntity email = new EmailAddressEntity(user, "admin@admin.com");
     	user.setEmailAddress(email);
         user.setEnabled(true);
     	
-        nameRepository.save(name);
+      //  nameRepository.save(name);
     	userRepository.save(user);
     }
  

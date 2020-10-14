@@ -20,21 +20,19 @@ import com.group7.banking.component.UserEntityConverter;
 import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
 import com.group7.banking.model.nosql.ConfirmationTokenEntity;
+import com.group7.banking.model.nosql.ProvidedIncomeEntity;
 import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.model.sql.BillingAddressEntity;
 import com.group7.banking.model.sql.EmailAddressEntity;
-import com.group7.banking.model.sql.NameEntity;
-import com.group7.banking.model.sql.PhoneNumberEntity;
-import com.group7.banking.model.sql.ProvidedIncomeEntity;
 import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.SsnEntity;
 import com.group7.banking.model.sql.UserEntity;
+import com.group7.banking.repository.nosql.NameRepository;
+import com.group7.banking.repository.nosql.PhoneNumberRepository;
+import com.group7.banking.repository.nosql.ProvidedIncomeRepository;
 import com.group7.banking.repository.sql.AccountRepository;
 import com.group7.banking.repository.sql.BillingAddressRepository;
 import com.group7.banking.repository.sql.EmailAddressRepository;
-import com.group7.banking.repository.sql.NameRepository;
-import com.group7.banking.repository.sql.PhoneNumberRepository;
-import com.group7.banking.repository.sql.ProvidedIncomeRepository;
 import com.group7.banking.repository.sql.RoleRepository;
 import com.group7.banking.repository.sql.SSNRepository;
 import com.group7.banking.repository.sql.UserRepository;
@@ -91,12 +89,12 @@ public class UserService {
     	Optional<UserEntity> optionalUser = userRepository.findById(userId);
     	
     	if (optionalUser.isPresent()) {
-    		UserEntity user = optionalUser.get();
-    		
-    		userData.setUserName(user.getUsername());
-    		userData.setFirstName(user.getName().getFirstName());
-    		userData.setMiddleName(user.getName().getMiddleName());
-    		userData.setLastName(user.getName().getLastName());
+   		UserEntity user = optionalUser.get();
+   		
+//    		userData.setUserName(user.getUsername());
+//    		userData.setFirstName(user.getName().getFirstName());
+//    		userData.setMiddleName(user.getName().getMiddleName());
+//    		userData.setLastName(user.getName().getLastName());
     	}
     	
     	return userData;
@@ -121,11 +119,11 @@ public class UserService {
     	String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
     	user.setPassword(encryptedPassword);
     	
-    	nameRepository.save(user.getName());
-    	providedIncomeRepository.save(user.getProvidedIncome());
+    //	nameRepository.save(user.getName());
+    //	providedIncomeRepository.save(user.getProvidedIncome());
     	billingAddressRepository.save(user.getBillingAddress());
     	emailAddressRepository.save(user.getEmailAddress());
-    	phoneNumberRepository.save(user.getPhoneNumber());
+    //	phoneNumberRepository.save(user.getPhoneNumber());
     	ssnRepository.save(user.getSsn());
     	
     	// TODO: This can probably be removed and we can have some kind of add account
@@ -156,11 +154,11 @@ public class UserService {
     	
     	UserEntity user = new UserEntity(signUpDto.getUsername(), signUpDto.getPassword(), birthDate);
     	
-    	NameEntity name = new NameEntity(user, signUpDto.getFirstName(), signUpDto.getMiddleName(), signUpDto.getLastName());
-    	user.setName(name);
-    	
-    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(user, signUpDto.getProvidedIncome());
-    	user.setProvidedIncome(providedIncome);
+//    	NameEntity name = new NameEntity(user, signUpDto.getFirstName(), signUpDto.getMiddleName(), signUpDto.getLastName());
+//    	user.setName(name);
+//    	
+    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(signUpDto.getProvidedIncome());
+    //	user.setProvidedIncome(providedIncome);
     	
     	// This should look up matching addresses first
     	// Then either create and add the user to it OR get the match and add the user to that
@@ -177,9 +175,9 @@ public class UserService {
     	EmailAddressEntity emailAddress = new EmailAddressEntity(user, signUpDto.getEmailAddress());
     	user.setEmailAddress(emailAddress);
     	
-    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpDto.getPhoneNumber());
-    	user.setPhoneNumber(phoneNumber);
-    	
+//    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpDto.getPhoneNumber());
+//    	user.setPhoneNumber(phoneNumber);
+//    	
     	SsnEntity ssn = new SsnEntity(user, signUpDto.getSsn());
     	user.setSsn(ssn);
     	
