@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,7 +32,7 @@ public class BillingAddressEntity  implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "billingAddress")
+	@OneToMany(mappedBy = "billingAddress")
 	@ToString.Exclude private Set<UserEntity> users;
 	
 	@Getter
