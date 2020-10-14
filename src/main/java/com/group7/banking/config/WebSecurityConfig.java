@@ -52,9 +52,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		} else {
 			http.cors().and().csrf().disable()
 			.authorizeRequests()
+			.antMatchers("/sign-up/**", "/login/**").permitAll()
+			.antMatchers("/admin/**").hasRole("ADMIN")
 			.antMatchers("/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-	        .antMatchers("/admin/**").hasRole("ADMIN")
-	        .antMatchers("/sign-up/**", "/login/**").permitAll()
 	        .and()
 	        .formLogin()
 	        .loginProcessingUrl("/perform_login")

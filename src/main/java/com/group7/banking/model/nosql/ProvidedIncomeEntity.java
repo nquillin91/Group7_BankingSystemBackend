@@ -1,20 +1,11 @@
 package com.group7.banking.model.nosql;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-
-import org.springframework.data.mongodb.core.mapping.Field;
-
-import com.group7.banking.model.sql.UserEntity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -30,8 +21,7 @@ public class ProvidedIncomeEntity implements Serializable {
 
 	@Id
 	@Getter
-	private Long id;
-	
+	private String id;
 	
 	@Getter
 	@Setter
@@ -39,15 +29,20 @@ public class ProvidedIncomeEntity implements Serializable {
 	private double incomeAmount;
 	
 	@Getter
+	@Field(name = "user_id")
+	private Long userId;
+	
+	@Getter
 	@Field(name="created_date")
 	private LocalDateTime createdDate;
 	
 	@Getter
+	@Setter
 	@Field(name="last_updated_date")
 	private LocalDateTime lastUpdatedDate;
 
-	public ProvidedIncomeEntity(double incomeAmount) {
-		
+	public ProvidedIncomeEntity(Long userId, double incomeAmount) {
+		this.userId = userId;
 		this.incomeAmount = incomeAmount;
 		this.createdDate = LocalDateTime.now();
 		this.lastUpdatedDate = LocalDateTime.now();

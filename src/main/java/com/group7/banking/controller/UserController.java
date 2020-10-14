@@ -42,7 +42,6 @@ public class UserController {
 
 	@GetMapping("/sign-up/confirm")
 	public String confirmMail(@RequestParam("token") String token) throws Exception {
-
 		List<ConfirmationTokenEntity> searchResult = confirmationTokenService.findConfirmationTokenByToken(token);
 
 		if(searchResult.size() == 1) {

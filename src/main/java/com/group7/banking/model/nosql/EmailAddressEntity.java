@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,16 +27,20 @@ public class EmailAddressEntity implements Serializable {
 	
 	@Getter
 	@Setter
+	@Field(name = "email_address")
 	private String emailAddress;
 
 	@Getter
+	@Field(name = "user_id")
 	private Long userId;
 	
 	@Getter
+	@Field(name = "created_date")
 	private LocalDateTime createdDate;
 	
 	@Getter
 	@Setter
+	@Field(name = "last_updated_date")
 	private LocalDateTime lastUpdatedDate;
 
 	public EmailAddressEntity(Long userId, String emailAddress) {

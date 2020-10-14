@@ -11,6 +11,6 @@ import com.group7.banking.model.nosql.EmailAddressEntity;
 @Repository
 public interface EmailAddressRepository extends MongoRepository<EmailAddressEntity, String> {
 	
-	@Query("{userId: ?0}")
-	public List<EmailAddressEntity> findEmailAddressByUserId(Long userId);
+	@Query("{user_id: ?0}")
+	public List<EmailAddressEntity> findByUserId(Long userId);
 }

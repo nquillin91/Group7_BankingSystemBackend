@@ -21,25 +21,21 @@ import com.group7.banking.component.UserEntityConverter;
 import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
 import com.group7.banking.model.nosql.ConfirmationTokenEntity;
-
+import com.group7.banking.model.nosql.EmailAddressEntity;
+import com.group7.banking.model.nosql.NameEntity;
+import com.group7.banking.model.nosql.PhoneNumberEntity;
 import com.group7.banking.model.nosql.ProvidedIncomeEntity;
 import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.model.sql.BillingAddressEntity;
-import com.group7.banking.model.nosql.EmailAddressEntity;
-import com.group7.banking.model.nosql.NameEntity;
-
 import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.SsnEntity;
 import com.group7.banking.model.sql.UserEntity;
+import com.group7.banking.repository.nosql.EmailAddressRepository;
 import com.group7.banking.repository.nosql.NameRepository;
 import com.group7.banking.repository.nosql.PhoneNumberRepository;
 import com.group7.banking.repository.nosql.ProvidedIncomeRepository;
 import com.group7.banking.repository.sql.AccountRepository;
 import com.group7.banking.repository.sql.BillingAddressRepository;
-
-import com.group7.banking.repository.nosql.EmailAddressRepository;
-
-
 import com.group7.banking.repository.sql.RoleRepository;
 import com.group7.banking.repository.sql.SSNRepository;
 import com.group7.banking.repository.sql.UserRepository;
@@ -96,14 +92,8 @@ public class UserService {
     	Optional<UserEntity> optionalUser = userRepository.findById(userId);
     	
     	if (optionalUser.isPresent()) {
-
-   		UserEntity user = optionalUser.get();
-   		
-//    		userData.setUserName(user.getUsername());
-//    		userData.setFirstName(user.getName().getFirstName());
-//    		userData.setMiddleName(user.getName().getMiddleName());
-//    		userData.setLastName(user.getName().getLastName());
-
+    		UserEntity user = optionalUser.get();
+    		userData = getUserData(user);
     	}
     	
     	return userData;
@@ -128,21 +118,6 @@ public class UserService {
     	String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
     	user.setPassword(encryptedPassword);
     	
-
-    //	nameRepository.save(user.getName());
-    //	providedIncomeRepository.save(user.getProvidedIncome());
-    	billingAddressRepository.save(user.getBillingAddress());
-    	emailAddressRepository.save(user.getEmailAddress());
-    //	phoneNumberRepository.save(user.getPhoneNumber());
-//    	ssnRepository.save(user.getSsn());
-    	
-    	// TODO: This can probably be removed and we can have some kind of add account
-    	// functionality (start with no accounts)
-    	AccountEntity account = new AccountEntity(user, AccountEntity.Type.CHECKING, 0.0);
-    	user.addAccount(account);
-    	accountRepository.save(account);
-    	
-
     	userRepository.save(user);
     	
     	ConfirmationTokenEntity confirmationToken = new ConfirmationTokenEntity(user.getId());
@@ -165,14 +140,7 @@ public class UserService {
     	LocalDate birthDate = LocalDate.parse(signUpDto.getBirthDate(), formatter);
     	
     	UserEntity user = new UserEntity(signUpDto.getUsername(), signUpDto.getPassword(), birthDate);
-
-    	
-//    	NameEntity name = new NameEntity(user, signUpDto.getFirstName(), signUpDto.getMiddleName(), signUpDto.getLastName());
-//    	user.setName(name);
-//    	
-    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(signUpDto.getProvidedIncome());
-    //	user.setProvidedIncome(providedIncome);
-
+    	userRepository.save(user);
     	
     	// This should look up matching addresses first
     	// Then either create and add the user to it OR get the match and add the user to that
@@ -187,18 +155,8 @@ public class UserService {
     	}
     	user.setBillingAddress(billingAddress);
     	
-
-
-//    	EmailAddressEntity emailAddress = new EmailAddressEntity(1l, signUpDto.getEmailAddress());
-//    	user.setEmailAddress(emailAddress);
-
-    	
-//    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpDto.getPhoneNumber());
-//    	user.setPhoneNumber(phoneNumber);
-//    	
-
     	SsnEntity ssn = new SsnEntity(user, signUpDto.getSsn());
-//    	user.setSsn(ssn);
+    	user.setSsn(ssn);
     	
     	// TODO: This can probably be removed and we can have some kind of add account
     	// functionality (start with no accounts)
@@ -206,21 +164,25 @@ public class UserService {
     	user.addAccount(account);
     	accountRepository.save(account);
     	
-    	NameEntity name = new NameEntity( signUpDto.getFirstName(),
+    	NameEntity name = new NameEntity(user.getId(), signUpDto.getFirstName(),
     			signUpDto.getMiddleName(), signUpDto.getLastName());
     	
     	EmailAddressEntity emailAddress = new EmailAddressEntity(user.getId(),
     			signUpDto.getEmailAddress());
     	
+    	ProvidedIncomeEntity providedIncome = new ProvidedIncomeEntity(user.getId(), signUpDto.getProvidedIncome());
+    	
+    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user.getId(), signUpDto.getPhoneNumber());
+    	
     	// Mongo repos
     	nameRepository.save(name);
     	emailAddressRepository.save(emailAddress);
+    	providedIncomeRepository.save(providedIncome);
+    	phoneNumberRepository.save(phoneNumber);
     	
     	// Sql repos
-//    	providedIncomeRepository.save(user.getProvidedIncome());
     	billingAddressRepository.save(user.getBillingAddress());
-//    	phoneNumberRepository.save(user.getPhoneNumber());
-//    	ssnRepository.save(user.getSsn());
+    	ssnRepository.save(user.getSsn());
     	
     	return user;
     }
@@ -259,7 +221,7 @@ public class UserService {
         	
         	confirmationTokenService.saveConfirmationToken(newConfirmationToken);
         	
-        	List<EmailAddressEntity> emailAddresses = emailAddressRepository.findEmailAddressByUserId(optionalUser.get().getId());
+        	List<EmailAddressEntity> emailAddresses = emailAddressRepository.findByUserId(optionalUser.get().getId());
         	
         	if (emailAddresses.size() == 0) {
         		throw new Exception("Email not found for userId: " + optionalUser.get().getId());

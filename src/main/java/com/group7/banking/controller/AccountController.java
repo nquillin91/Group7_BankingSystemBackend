@@ -11,21 +11,18 @@ import com.group7.banking.service.sql.AccountService;
 
 @RestController("AccountController")
 public class AccountController {
-	
-    @Autowired
-    private AccountService accountService;
 
-    @GetMapping("/accounts/{id}")
-    public AccountEntity get(@PathVariable long id) {
+	@Autowired
+	private AccountService accountService;
 
-       
-        return accountService.findById(id);
-    }
-    
-    @DeleteMapping("/accounts/{id}")
-    public void delete(@PathVariable String id) {
+	@GetMapping("/accounts/{id}")
+	public AccountEntity get(@PathVariable long id) {
+		return accountService.findById(id);
+	}
 
-        Long accountID = Long.parseLong(id);
-        accountService.deleteById(accountID);
-    }
+	@DeleteMapping("/accounts/{id}")
+	public void delete(@PathVariable String id) {
+		Long accountID = Long.parseLong(id);
+		accountService.deleteById(accountID);
+	}
 }

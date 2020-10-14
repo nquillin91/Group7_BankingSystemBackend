@@ -11,7 +11,7 @@ public class SignUpDTO {
 	private String lastName;
 	private String birthDate;
 	private String ssn;
-	private Float providedIncome;
+	private Double providedIncome;
 	private String phoneNumber;
 	private String emailAddress;
 	private String addressLine1;

@@ -7,6 +7,7 @@ import java.util.UUID;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,16 +27,20 @@ public class ConfirmationTokenEntity implements Serializable {
 
 	@Getter
 	@Setter
+	@Field(name = "confirmation_token")
 	private String confirmationToken;
 
 	@Getter
+	@Field(name = "created_date")
 	private LocalDateTime createdDate;
 	
 	@Getter
 	@Setter
+	@Field(name = "expiration_date")
 	private LocalDateTime expirationDate;
 
 	@Getter
+	@Field(name = "user_id")
 	private Long userId;
 
 	public ConfirmationTokenEntity(Long userId) {

@@ -4,30 +4,25 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+
 import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-<<<<<<< HEAD
-
-import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.nosql.EmailAddressEntity;
+import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.sql.PrivilegeEntity;
 import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.UserEntity;
 import com.group7.banking.repository.nosql.ConfirmationTokenRepository;
 import com.group7.banking.repository.nosql.EmailAddressRepository;
-=======
-import com.group7.banking.model.nosql.NameEntity;
-import com.group7.banking.model.sql.EmailAddressEntity;
-import com.group7.banking.model.sql.PrivilegeEntity;
-import com.group7.banking.model.sql.RoleEntity;
-import com.group7.banking.model.sql.UserEntity;
->>>>>>> 00b96288dac8b6980cd2c1cbf03b35dcd26d3f43
 import com.group7.banking.repository.nosql.NameRepository;
+import com.group7.banking.repository.nosql.PhoneNumberRepository;
+import com.group7.banking.repository.nosql.ProvidedIncomeRepository;
 import com.group7.banking.repository.sql.PrivilegeRepository;
 import com.group7.banking.repository.sql.RoleRepository;
 import com.group7.banking.repository.sql.UserRepository;
@@ -46,6 +41,12 @@ public class SetupDataLoader implements
     
     @Autowired
     private EmailAddressRepository emailAddressRepository;
+    
+    @Autowired
+    private PhoneNumberRepository phoneNumberRepository;
+    
+    @Autowired
+    private ProvidedIncomeRepository providedIncomeRepository;
  
     @Autowired
     private RoleRepository roleRepository;
@@ -68,6 +69,8 @@ public class SetupDataLoader implements
         
         nameRepository.deleteAll();
         emailAddressRepository.deleteAll();
+        phoneNumberRepository.deleteAll();
+        providedIncomeRepository.deleteAll();
         confirmationTokenRepository.deleteAll();
         
         createAdminUser();
@@ -101,26 +104,11 @@ public class SetupDataLoader implements
     	user.setEnabled(true);
     	userRepository.save(user);
     	
-<<<<<<< HEAD
-
-//    	NameEntity name = new NameEntity(user, "Admin", "", "");
-//    	user.setName(name);
-//    	
-//    	EmailAddressEntity email = new EmailAddressEntity(user, "admin@admin.com");
-//    	user.setEmailAddress(email);
-//        user.setEnabled(true);
-=======
-//    	NameEntity name = new NameEntity(user, "Admin", "", "");
-//    	user.setName(name);
-//    	
-    	EmailAddressEntity email = new EmailAddressEntity(user, "admin@admin.com");
-    	user.setEmailAddress(email);
-        user.setEnabled(true);
->>>>>>> 00b96288dac8b6980cd2c1cbf03b35dcd26d3f43
+    	NameEntity name = new NameEntity(user.getId(), "Admin", "", "");
+    	EmailAddressEntity email = new EmailAddressEntity(user.getId(), "admin@admin.com");
     	
-      //  nameRepository.save(name);
-    	userRepository.save(user);
-
+    	nameRepository.save(name);
+    	emailAddressRepository.save(email);
     }
  
     @Transactional
