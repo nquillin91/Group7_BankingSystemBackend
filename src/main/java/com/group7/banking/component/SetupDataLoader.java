@@ -11,6 +11,7 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+<<<<<<< HEAD
 
 import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.nosql.EmailAddressEntity;
@@ -19,6 +20,13 @@ import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.UserEntity;
 import com.group7.banking.repository.nosql.ConfirmationTokenRepository;
 import com.group7.banking.repository.nosql.EmailAddressRepository;
+=======
+import com.group7.banking.model.nosql.NameEntity;
+import com.group7.banking.model.sql.EmailAddressEntity;
+import com.group7.banking.model.sql.PrivilegeEntity;
+import com.group7.banking.model.sql.RoleEntity;
+import com.group7.banking.model.sql.UserEntity;
+>>>>>>> 00b96288dac8b6980cd2c1cbf03b35dcd26d3f43
 import com.group7.banking.repository.nosql.NameRepository;
 import com.group7.banking.repository.sql.PrivilegeRepository;
 import com.group7.banking.repository.sql.RoleRepository;
@@ -93,6 +101,7 @@ public class SetupDataLoader implements
     	user.setEnabled(true);
     	userRepository.save(user);
     	
+<<<<<<< HEAD
 
 //    	NameEntity name = new NameEntity(user, "Admin", "", "");
 //    	user.setName(name);
@@ -100,6 +109,14 @@ public class SetupDataLoader implements
 //    	EmailAddressEntity email = new EmailAddressEntity(user, "admin@admin.com");
 //    	user.setEmailAddress(email);
 //        user.setEnabled(true);
+=======
+//    	NameEntity name = new NameEntity(user, "Admin", "", "");
+//    	user.setName(name);
+//    	
+    	EmailAddressEntity email = new EmailAddressEntity(user, "admin@admin.com");
+    	user.setEmailAddress(email);
+        user.setEnabled(true);
+>>>>>>> 00b96288dac8b6980cd2c1cbf03b35dcd26d3f43
     	
       //  nameRepository.save(name);
     	userRepository.save(user);

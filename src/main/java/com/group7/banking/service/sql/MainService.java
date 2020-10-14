@@ -12,7 +12,10 @@ import com.group7.banking.model.nosql.PhoneNumberEntity;
 import com.group7.banking.model.nosql.ProvidedIncomeEntity;
 import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.model.sql.BillingAddressEntity;
+
 import com.group7.banking.model.nosql.EmailAddressEntity;
+
+
 import com.group7.banking.model.sql.SsnEntity;
 import com.group7.banking.model.sql.UserEntity;
 import com.group7.banking.repository.nosql.NameRepository;
@@ -20,7 +23,9 @@ import com.group7.banking.repository.nosql.PhoneNumberRepository;
 import com.group7.banking.repository.nosql.ProvidedIncomeRepository;
 import com.group7.banking.repository.sql.AccountRepository;
 import com.group7.banking.repository.sql.BillingAddressRepository;
+
 import com.group7.banking.repository.nosql.EmailAddressRepository;
+
 import com.group7.banking.repository.sql.SSNRepository;
 import com.group7.banking.repository.sql.UserRepository;
 
@@ -67,7 +72,7 @@ public class MainService {
     	//userA.setPhoneNumber(phoneNumA);
     	
     	SsnEntity ssnA = new SsnEntity(userA, "123-a");
-    	userA.setSsn(ssnA);
+//    	userA.setSsn(ssnA);
     	
     	AccountEntity accountA = new AccountEntity(userA, AccountEntity.Type.CHECKING, 100.0);
     	userA.addAccount(accountA);
@@ -102,7 +107,7 @@ public class MainService {
     	//userB.setPhoneNumber(phoneNumB);
     	
     	SsnEntity ssnB = new SsnEntity(userB, "123-a");
-    	userB.setSsn(ssnB);
+//    	userB.setSsn(ssnB);
     	
     	AccountEntity accountBChecking = new AccountEntity(userB, AccountEntity.Type.CHECKING, 50.0);
     	userB.addAccount(accountBChecking);

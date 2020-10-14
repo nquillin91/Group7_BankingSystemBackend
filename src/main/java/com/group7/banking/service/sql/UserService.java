@@ -27,6 +27,7 @@ import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.model.sql.BillingAddressEntity;
 import com.group7.banking.model.nosql.EmailAddressEntity;
 import com.group7.banking.model.nosql.NameEntity;
+
 import com.group7.banking.model.sql.RoleEntity;
 import com.group7.banking.model.sql.SsnEntity;
 import com.group7.banking.model.sql.UserEntity;
@@ -35,7 +36,9 @@ import com.group7.banking.repository.nosql.PhoneNumberRepository;
 import com.group7.banking.repository.nosql.ProvidedIncomeRepository;
 import com.group7.banking.repository.sql.AccountRepository;
 import com.group7.banking.repository.sql.BillingAddressRepository;
+
 import com.group7.banking.repository.nosql.EmailAddressRepository;
+
 
 import com.group7.banking.repository.sql.RoleRepository;
 import com.group7.banking.repository.sql.SSNRepository;
@@ -131,7 +134,7 @@ public class UserService {
     	billingAddressRepository.save(user.getBillingAddress());
     	emailAddressRepository.save(user.getEmailAddress());
     //	phoneNumberRepository.save(user.getPhoneNumber());
-    	ssnRepository.save(user.getSsn());
+//    	ssnRepository.save(user.getSsn());
     	
     	// TODO: This can probably be removed and we can have some kind of add account
     	// functionality (start with no accounts)
@@ -185,15 +188,17 @@ public class UserService {
     	user.setBillingAddress(billingAddress);
     	
 
+
 //    	EmailAddressEntity emailAddress = new EmailAddressEntity(1l, signUpDto.getEmailAddress());
 //    	user.setEmailAddress(emailAddress);
+
     	
 //    	PhoneNumberEntity phoneNumber = new PhoneNumberEntity(user, signUpDto.getPhoneNumber());
 //    	user.setPhoneNumber(phoneNumber);
 //    	
 
     	SsnEntity ssn = new SsnEntity(user, signUpDto.getSsn());
-    	user.setSsn(ssn);
+//    	user.setSsn(ssn);
     	
     	// TODO: This can probably be removed and we can have some kind of add account
     	// functionality (start with no accounts)
@@ -215,7 +220,7 @@ public class UserService {
 //    	providedIncomeRepository.save(user.getProvidedIncome());
     	billingAddressRepository.save(user.getBillingAddress());
 //    	phoneNumberRepository.save(user.getPhoneNumber());
-    	ssnRepository.save(user.getSsn());
+//    	ssnRepository.save(user.getSsn());
     	
     	return user;
     }

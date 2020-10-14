@@ -17,39 +17,37 @@ public class NameService {
 	
     @Autowired
     private AccountRepository accountRepository;
-//    
-//    public String clearAndInit() {
-//    	logger.info("Clearing all data");
-//    	accountRepository.deleteAll();
-//    	
-//    	logger.info("Initializing users");
-//    	
-//    	
-//    	
-//    	return "Cleared and re-initialized";
-//    }
-//    
-   
     
-    
-    
-//    If bal>send money: send money
-     void sendMoney() {
+    public String clearAndInit() {
+    	logger.info("Clearing all data");
+    	accountRepository.deleteAll();
     	
-    }
-//  To check is balance> send money
-    public void validateTransaction() {
+    	logger.info("Initializing users");
     	
+    	
+    	
+    	return "Cleared and re-initialized";
     }
     
-// TODO:  Get beneficiary
-    public void getBeneficiary() {
-    	
+    public List<AccountEntity> findAll() {
+
+        Iterable<AccountEntity> it = accountRepository.findAll();
+
+        ArrayList<AccountEntity> users = new ArrayList<AccountEntity>();
+        it.forEach(e -> {
+        	users.add(e);
+        });
+
+        return users;
     }
-    
-    
-    
-    
-    
-    
+
+    public Long count() {
+
+        return accountRepository.count();
+    }
+
+    public void deleteById(Long userId) {
+
+    	accountRepository.deleteById(userId);
+    }
 }

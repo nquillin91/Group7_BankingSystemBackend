@@ -6,13 +6,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 00b96288dac8b6980cd2c1cbf03b35dcd26d3f43
 import com.group7.banking.dto.TransactionDTO;
 import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.service.sql.AccountService;
 import com.group7.banking.service.sql.TransactionService;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 00b96288dac8b6980cd2c1cbf03b35dcd26d3f43
 @RestController("TransactionController")
 public class TransactionController {
 
