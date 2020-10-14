@@ -79,6 +79,12 @@ public class UserEntity implements UserDetails {
 	
 	@Getter
 	@Setter
+	@Column(name="loans")
+	@OneToMany(mappedBy = "user")
+	private Set<LoanEntity> loans;
+	
+	@Getter
+	@Setter
 	@ManyToMany(fetch=FetchType.EAGER)
     @JoinTable( 
         name = "users_roles", 
@@ -119,6 +125,18 @@ public class UserEntity implements UserDetails {
 		} else {
 			if (!this.getAccounts().contains(account)) {
 				this.getAccounts().add(account);
+			}
+		}
+	}
+	
+	public void addLoan(LoanEntity loan) {
+		if (this.getLoans() == null) {
+			Set<LoanEntity> loans = new HashSet<LoanEntity>();
+			loans.add(loan);
+			this.setLoans(loans);
+		} else {
+			if (!this.getLoans().contains(loan)) {
+				this.getLoans().add(loan);
 			}
 		}
 	}
