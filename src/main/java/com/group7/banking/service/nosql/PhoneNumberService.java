@@ -1,4 +1,4 @@
-package com.group7.banking.service.sql;
+package com.group7.banking.service.nosql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.repository.sql.AccountRepository;
 
 @Service
-public class NameService {
-	Logger logger = LoggerFactory.getLogger(NameService.class);
+public class PhoneNumberService {
+	Logger logger = LoggerFactory.getLogger(PhoneNumberService.class);
 	
     @Autowired
     private AccountRepository accountRepository;

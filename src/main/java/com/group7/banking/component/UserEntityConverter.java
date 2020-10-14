@@ -20,10 +20,15 @@ public class UserEntityConverter {
 		NameEntity name = nameRepository.findByUserId(userEntity.getId());
 		
 		userData.setUserName(userEntity.getUsername());
-		userData.setFirstName(name.getFirstName());
-		userData.setMiddleName(name.getMiddleName());
-		userData.setLastName(name.getLastName());
-		
+
+
+//		
+//		NameEntity userName = userEntity.getName();
+//		userData.setFirstName(userName.getFirstName());
+//		userData.setMiddleName(userName.getMiddleName());
+//		userData.setLastName(userName.getLastName());
+//		
+
 		return userData;
     }
 }

@@ -1,44 +1,34 @@
 package com.group7.banking.model.nosql;
-
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import javax.persistence.Id;
-
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import com.group7.banking.model.sql.UserEntity;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
-
-@Document(collection = "names")
+@Document(collection = "phone_numbers")
 @NoArgsConstructor(access=AccessLevel.PROTECTED)
 @ToString
-public class NameEntity implements Serializable {
-	private static final long serialVersionUID = -6724917438603850834L;
-	
-	
+public class PhoneNumberEntity implements Serializable {
+	private static final long serialVersionUID = 7165149108409522461L;
+
 	@Id
 	@Getter
 	private String id;
-	
+
 	@Getter
-	@Field(name="first_name")
-	private String firstName;
-	
-	@Getter
-	@Field(name="middle_name")
-	private String middleName;
-	
-	@Getter
-	@Field(name="last_name")
-	private String lastName;
+	@Field(name="phone_number")
+	private String phoneNumber;
 	
 	@Getter
 	@Field(name="created_date")
@@ -47,13 +37,12 @@ public class NameEntity implements Serializable {
 	@Getter
 	@Field(name="last_updated_date")
 	private LocalDateTime lastUpdatedDate;
+
+	public PhoneNumberEntity(String phoneNumber) {
 	
-	public NameEntity(String firstName, String middleName, String lastName) {
-		
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
 		this.createdDate = LocalDateTime.now();
 		this.lastUpdatedDate = LocalDateTime.now();
 	}
-}
+	
+	}

@@ -1,4 +1,4 @@
-package com.group7.banking.service.sql;
+package com.group7.banking.service.nosql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.group7.banking.model.sql.ProvidedIncomeEntity;
-import com.group7.banking.repository.sql.ProvidedIncomeRepository;
+import com.group7.banking.model.nosql.ProvidedIncomeEntity;
+import com.group7.banking.repository.nosql.ProvidedIncomeRepository;
 
 @Service
 public class ProvidedIncomeService {

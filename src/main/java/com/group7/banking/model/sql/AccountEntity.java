@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @Entity
@@ -52,6 +53,7 @@ public class AccountEntity implements Serializable {
 	private Type accountType;
 	
 	@Getter
+	@Setter
 	private Double balance;
 	
 	@Getter
