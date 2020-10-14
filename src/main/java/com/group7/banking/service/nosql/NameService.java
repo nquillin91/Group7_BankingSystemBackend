@@ -1,4 +1,4 @@
-package com.group7.banking.service.sql;
+package com.group7.banking.service.nosql;
 
 import java.util.ArrayList;
 import java.util.List;

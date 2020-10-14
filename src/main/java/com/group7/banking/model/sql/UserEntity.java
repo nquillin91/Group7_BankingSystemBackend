@@ -27,6 +27,11 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.group7.banking.model.nosql.EmailAddressEntity;
+import com.group7.banking.model.nosql.NameEntity;
+import com.group7.banking.model.nosql.PhoneNumberEntity;
+import com.group7.banking.model.nosql.ProvidedIncomeEntity;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -58,11 +63,6 @@ public class UserEntity implements UserDetails {
 	@Column(name="birthdate")
 	private LocalDate birthdate;
 	
-	@Getter
-	@Setter
-	@OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "provided_income_id", referencedColumnName = "id")
-	private ProvidedIncomeEntity providedIncome;
 	
 	@Getter
 	@Setter
@@ -73,8 +73,10 @@ public class UserEntity implements UserDetails {
 	@Getter
 	@Setter
 	@OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "phone_number_id", referencedColumnName = "id")
-	private PhoneNumberEntity phoneNumber;
+
+    @JoinColumn(name = "email_address_id", referencedColumnName = "id")
+	private EmailAddressEntity emailAddress;
+
 	
 	@Getter
 	@Setter
