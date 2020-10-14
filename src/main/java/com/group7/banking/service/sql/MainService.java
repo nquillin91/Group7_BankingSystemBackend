@@ -53,83 +53,88 @@ public class MainService {
     private AccountRepository accountRepository;
     
     public String clearAndInit() {
-    	logger.info("Clearing all data");
-    	//userRepository.deleteAll();
+		
+
+
+
+
+    	// logger.info("Clearing all data");
+    	// //userRepository.deleteAll();
     	
-    	logger.info("Initializing users");
+    	// logger.info("Initializing users");
     	
-    	// -- Adding test user a --
-    	UserEntity userA = new UserEntity("userA", "passA", LocalDate.now());
+    	// // -- Adding test user a --
+    	// UserEntity userA = new UserEntity("userA", "passA", LocalDate.now());
     	
-    	NameEntity nameA = new NameEntity(userA, "John-a", "", "Doe-a");
-    	userA.setName(nameA);
+    	// NameEntity nameA = new NameEntity(userA, "John-a", "", "Doe-a");
+    	// userA.setName(nameA);
     	
-    	ProvidedIncomeEntity providedIncomeA = new ProvidedIncomeEntity(userA, 70000);
-    	userA.setProvidedIncome(providedIncomeA);
+    	// ProvidedIncomeEntity providedIncomeA = new ProvidedIncomeEntity(userA, 70000);
+    	// userA.setProvidedIncome(providedIncomeA);
     	
-    	BillingAddressEntity billingA = new BillingAddressEntity("123 Abc Avenue A", "Apt 1",
-    			"Chicago", "IL", "60602");
-    	billingA.getUsers().add(userA);
-    	userA.setBillingAddress(billingA);
+    	// BillingAddressEntity billingA = new BillingAddressEntity("123 Abc Avenue A", "Apt 1",
+    	// 		"Chicago", "IL", "60602");
+    	// billingA.getUsers().add(userA);
+    	// userA.setBillingAddress(billingA);
     	
-    	EmailAddressEntity emailA = new EmailAddressEntity(userA, "john.doeA@example.com");
-    	userA.setEmailAddress(emailA);
+    	// EmailAddressEntity emailA = new EmailAddressEntity(userA, "john.doeA@example.com");
+    	// userA.setEmailAddress(emailA);
     	
-    	PhoneNumberEntity phoneNumA = new PhoneNumberEntity(userA, "012-345-6780");
-    	userA.setPhoneNumber(phoneNumA);
+    	// PhoneNumberEntity phoneNumA = new PhoneNumberEntity(userA, "012-345-6780");
+    	// userA.setPhoneNumber(phoneNumA);
     	
-    	SsnEntity ssnA = new SsnEntity(userA, "123-a");
-    	userA.setSsn(ssnA);
+    	// SsnEntity ssnA = new SsnEntity(userA, "123-a");
+    	// userA.setSsn(ssnA);
     	
-    	AccountEntity accountA = new AccountEntity(userA, AccountEntity.Type.CHECKING, 100.0);
-    	userA.addAccount(accountA);
+    	// AccountEntity accountA = new AccountEntity(userA, AccountEntity.Type.CHECKING, 100.0);
+    	// userA.addAccount(accountA);
     	
-    	userRepository.save(userA);
-    	nameRepository.save(nameA);
-    	providedIncomeRepository.save(providedIncomeA);
-    	billingAddressRepository.save(billingA);
-    	emailAddressRepository.save(emailA);
-    	phoneNumberRepository.save(phoneNumA);
-    	ssnRepository.save(ssnA);
-    	accountRepository.save(accountA);
+    	// userRepository.save(userA);
+    	// nameRepository.save(nameA);
+    	// providedIncomeRepository.save(providedIncomeA);
+    	// billingAddressRepository.save(billingA);
+    	// emailAddressRepository.save(emailA);
+    	// phoneNumberRepository.save(phoneNumA);
+    	// ssnRepository.save(ssnA);
+    	// accountRepository.save(accountA);
     	
-    	// -- Adding test user b --
-    	UserEntity userB = new UserEntity("userB", "passB", LocalDate.now());
+    	// // -- Adding test user b --
+    	// UserEntity userB = new UserEntity("userB", "passB", LocalDate.now());
     	
-    	NameEntity nameB = new NameEntity(userB, "John-b", "", "Doe-b");
-    	userB.setName(nameB);
+    	// NameEntity nameB = new NameEntity(userB, "John-b", "", "Doe-b");
+    	// userB.setName(nameB);
     	
-    	ProvidedIncomeEntity providedIncomeB = new ProvidedIncomeEntity(userB, 145000);
-    	userB.setProvidedIncome(providedIncomeB);
+    	// ProvidedIncomeEntity providedIncomeB = new ProvidedIncomeEntity(userB, 145000);
+    	// userB.setProvidedIncome(providedIncomeB);
     	
-    	BillingAddressEntity billingAddressB = new BillingAddressEntity("123 Abc Avenue B", "Apt 1",
-    			"Chicago", "IL", "60602");
-    	billingAddressB.getUsers().add(userB);
-    	userB.setBillingAddress(billingAddressB);
+    	// BillingAddressEntity billingAddressB = new BillingAddressEntity("123 Abc Avenue B", "Apt 1",
+    	// 		"Chicago", "IL", "60602");
+    	// billingAddressB.getUsers().add(userB);
+    	// userB.setBillingAddress(billingAddressB);
     	
-    	EmailAddressEntity emailB = new EmailAddressEntity(userB, "john.doeB@example.com");
-    	userB.setEmailAddress(emailB);
+    	// EmailAddressEntity emailB = new EmailAddressEntity(userB, "john.doeB@example.com");
+    	// userB.setEmailAddress(emailB);
     	
-    	PhoneNumberEntity phoneNumB = new PhoneNumberEntity(userB, "012-345-6781");
-    	userB.setPhoneNumber(phoneNumB);
+    	// PhoneNumberEntity phoneNumB = new PhoneNumberEntity(userB, "012-345-6781");
+    	// userB.setPhoneNumber(phoneNumB);
     	
-    	SsnEntity ssnB = new SsnEntity(userB, "123-a");
-    	userB.setSsn(ssnB);
+    	// SsnEntity ssnB = new SsnEntity(userB, "123-a");
+    	// userB.setSsn(ssnB);
     	
-    	AccountEntity accountBChecking = new AccountEntity(userB, AccountEntity.Type.CHECKING, 50.0);
-    	userB.addAccount(accountBChecking);
-    	AccountEntity accountBSavings = new AccountEntity(userB, AccountEntity.Type.SAVINGS, 1000.0);
-    	userB.addAccount(accountBSavings);
+    	// AccountEntity accountBChecking = new AccountEntity(userB, AccountEntity.Type.CHECKING, 50.0);
+    	// userB.addAccount(accountBChecking);
+    	// AccountEntity accountBSavings = new AccountEntity(userB, AccountEntity.Type.SAVINGS, 1000.0);
+    	// userB.addAccount(accountBSavings);
     	
-    	userRepository.save(userB);
-    	nameRepository.save(nameB);
-    	providedIncomeRepository.save(providedIncomeB);
-    	billingAddressRepository.save(billingAddressB);
-    	emailAddressRepository.save(emailB);
-    	phoneNumberRepository.save(phoneNumB);
-    	ssnRepository.save(ssnB);
-    	accountRepository.save(accountBChecking);
-    	accountRepository.save(accountBSavings);
+    	// userRepository.save(userB);
+    	// nameRepository.save(nameB);
+    	// providedIncomeRepository.save(providedIncomeB);
+    	// billingAddressRepository.save(billingAddressB);
+    	// emailAddressRepository.save(emailB);
+    	// phoneNumberRepository.save(phoneNumB);
+    	// ssnRepository.save(ssnB);
+    	// accountRepository.save(accountBChecking);
+    	// accountRepository.save(accountBSavings);
     	
     	return "Cleared and re-initialized";
     }
