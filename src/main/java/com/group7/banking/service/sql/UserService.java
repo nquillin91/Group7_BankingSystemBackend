@@ -132,7 +132,6 @@ public class UserService {
     	logger.debug(user.toString());
     	String encryptedPassword = bCryptPasswordEncoder.encode(user.getPassword());
     	user.setPassword(encryptedPassword);
-    	
     	userRepository.save(user);
     	
     	ConfirmationTokenEntity confirmationToken = new ConfirmationTokenEntity(user.getId());
