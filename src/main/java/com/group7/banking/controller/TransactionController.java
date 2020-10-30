@@ -5,12 +5,10 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.group7.banking.dto.TransactionDTO;
 import com.group7.banking.model.sql.AccountEntity;
 import com.group7.banking.service.sql.AccountService;
 import com.group7.banking.service.sql.TransactionService;
-
 @RestController("TransactionController")
 public class TransactionController {
 
@@ -27,7 +25,12 @@ public class TransactionController {
 		boolean checkBal = false;
 		boolean transactionInitiated = false;
 
+
 		/* Getting the account object */
+
+		System.out.println("In Transaction");
+		/*Getting the account object*/ 
+
 		accountDetails = accountService.findById(transactionDTO.getOriginAccountDetails().getId());
 
 		/* Verifying Details of both target account and origin account */
