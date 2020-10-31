@@ -1,7 +1,6 @@
 package com.group7.banking.component;
 
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +56,7 @@ public class UserProfileConverter {
 		userProfile.setLastName(name.getLastName());
 		
 		// Pull birthdate and then format it to a string for the profile
-		String pattern = "d/MM/yyyy";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		userProfile.setBirthDate(simpleDateFormat.format(userEntity.getBirthdate()));
+		userProfile.setBirthDate(userEntity.getBirthdate().toString());
 		
 		// Pull phone number from phone number entity
 		userProfile.setPhoneNumber(phoneNumber.getPhoneNumber());
