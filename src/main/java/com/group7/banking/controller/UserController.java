@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,7 +37,8 @@ public class UserController {
     
     @GetMapping("/users/profile")
     public UserProfileDTO getUserProfile(HttpServletRequest request) throws Exception {
-        UserDetails principalUser = (UserDetails) request.getUserPrincipal();
+    	String principalUser = request.getUserPrincipal().getName();
+    	
         return userService.getUserProfile(principalUser);
     }
     
