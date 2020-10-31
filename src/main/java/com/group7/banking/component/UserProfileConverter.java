@@ -57,9 +57,8 @@ public class UserProfileConverter {
 		userProfile.setLastName(name.getLastName());
 		
 		// Pull birthdate and then format it to a string for the profile
-		String pattern = "yyyy-dd-MM";
+		String pattern = "d/MM/yyyy";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		System.out.println(userEntity.getBirthdate());
 		userProfile.setBirthDate(simpleDateFormat.format(userEntity.getBirthdate()));
 		
 		// Pull phone number from phone number entity
