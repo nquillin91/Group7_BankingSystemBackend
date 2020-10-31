@@ -33,7 +33,9 @@ public class TransactionController {
 		System.out.println("In Transaction");
 		/*Getting the account object*/ 
 
+
 		accountDetails = accountService.findById(transactionDTO.getTargetAccountDetails().getId());
+
 
 		/* Verifying Details of both target account and origin account */
 		isVerified = transactionService.verifyDetails(accountDetails, transactionDTO);
