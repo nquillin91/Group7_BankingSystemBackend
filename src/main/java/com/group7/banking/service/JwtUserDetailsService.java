@@ -16,7 +16,7 @@ import com.group7.banking.model.sql.UserEntity;
 import com.group7.banking.repository.sql.UserRepository;
 
 @Service
-public class BankingUserDetailsService implements UserDetailsService {
+public class JwtUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserRepository userRepository;

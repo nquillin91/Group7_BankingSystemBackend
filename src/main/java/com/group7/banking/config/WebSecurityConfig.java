@@ -1,22 +1,18 @@
 package com.group7.banking.config;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.group7.banking.service.BankingUserDetailsService;
+import com.group7.banking.service.JwtUserDetailsService;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,50 +21,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private boolean isLocalInstance;
 	
 	@Autowired
-	private BankingUserDetailsService bankingUserDetailsService;
+	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+	
+	@Autowired
+	private JwtUserDetailsService jwtUserDetailsService;
+	
+	@Autowired
+	private JwtRequestFilter jwtRequestFilter;
 
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("*"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+	@Bean
+	@Override
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
     
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-        
-		if (isLocalInstance) {
-			http.cors().and().csrf().disable().authorizeRequests()
-			  .antMatchers("/**").permitAll();
-		} else {
-			http.addFilterAfter(new SameSiteFilter(), BasicAuthenticationFilter.class).cors().and().csrf().disable()
-			.authorizeRequests()
-			.antMatchers("/sign-up/**", "/login/**").permitAll()
-			.antMatchers("/admin/**").hasRole("ADMIN")
-			.antMatchers("/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
-	        .and()
-	        .formLogin()
-	        .loginProcessingUrl("/perform_login")
-	        .and()
-	        .logout()
-	        .logoutUrl("/perform_logout")
-	        .deleteCookies("JSESSIONID");
-		} 
+		http.cors().and().csrf().disable()
+		.authorizeRequests()
+		.antMatchers("/sign-up/**", "/login/**").permitAll()
+		.anyRequest().authenticated().and()
+		.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+		.and().sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(bankingUserDetailsService)
+		auth.userDetailsService(jwtUserDetailsService)
 				.passwordEncoder(bCryptPasswordEncoder);
 	}
 }

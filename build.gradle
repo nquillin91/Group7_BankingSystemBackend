@@ -16,6 +16,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.12'
 	
 	compile group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
 	compile group: 'org.springframework.data', name: 'spring-data-commons', version: '2.3.3.RELEASE'
 	compile group: 'org.springframework.data', name: 'spring-data-mongodb', version: '3.0.3.RELEASE'
 	compile group: 'org.springframework.boot', name: 'spring-boot-autoconfigure-processor', version: '2.3.3.RELEASE'
