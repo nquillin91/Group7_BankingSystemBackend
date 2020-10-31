@@ -19,7 +19,6 @@ import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
 import com.group7.banking.dto.UserProfileDTO;
 import com.group7.banking.model.nosql.ConfirmationTokenEntity;
-import com.group7.banking.model.sql.UserEntity;
 import com.group7.banking.service.nosql.ConfirmationTokenService;
 import com.group7.banking.service.sql.UserService;
 
@@ -39,7 +38,7 @@ public class UserController {
     
     @GetMapping("/users/profile")
     public UserProfileDTO getUserProfile(HttpServletRequest request) throws Exception {
-        UserDetails principalUser = (UserEntity) request.getUserPrincipal();
+        UserDetails principalUser = (UserDetails) request.getUserPrincipal();
         return userService.getUserProfile(principalUser);
     }
     
