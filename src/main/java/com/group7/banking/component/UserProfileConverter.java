@@ -51,25 +51,35 @@ public class UserProfileConverter {
 		userProfile.setEmailAddress(emailAddressList.get(0).getEmailAddress());
 		
 		// Pull first, middle, and last name from name entity
-		userProfile.setFirstName(name.getFirstName());
-		userProfile.setMiddleName(name.getMiddleName());
-		userProfile.setLastName(name.getLastName());
+		if (name != null) {
+			userProfile.setFirstName(name.getFirstName());
+			userProfile.setMiddleName(name.getMiddleName());
+			userProfile.setLastName(name.getLastName());	
+		}
 		
 		// Pull birthdate and then format it to a string for the profile
-		userProfile.setBirthDate(userEntity.getBirthdate().toString());
+		if (userEntity.getBirthdate() != null) {
+			userProfile.setBirthDate(userEntity.getBirthdate().toString());	
+		}
 		
 		// Pull phone number from phone number entity
-		userProfile.setPhoneNumber(phoneNumber.getPhoneNumber());
+		if (phoneNumber != null) {
+			userProfile.setPhoneNumber(phoneNumber.getPhoneNumber());
+		}
 		
-		// Pull amount from provided income entity
-		userProfile.setProvidedIncome(providedIncome.getIncomeAmount());
+		if (providedIncome != null) {
+			// Pull amount from provided income entity
+			userProfile.setProvidedIncome(providedIncome.getIncomeAmount());
+		}
 		
-		// Parse out the individual pieces from the billing address entity
-		userProfile.setAddressLine1(billingAddress.getAddressLine1());
-		userProfile.setAddressLine2(billingAddress.getAddressLine2());
-		userProfile.setCity(billingAddress.getCity());
-		userProfile.setState(billingAddress.getState());
-		userProfile.setZipCode(billingAddress.getZipcode());
+		if (billingAddress != null) {
+			// Parse out the individual pieces from the billing address entity
+			userProfile.setAddressLine1(billingAddress.getAddressLine1());
+			userProfile.setAddressLine2(billingAddress.getAddressLine2());
+			userProfile.setCity(billingAddress.getCity());
+			userProfile.setState(billingAddress.getState());
+			userProfile.setZipCode(billingAddress.getZipcode());
+		}
 		
 		return userProfile;
     }
