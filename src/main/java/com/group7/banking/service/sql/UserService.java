@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -108,8 +109,14 @@ public class UserService {
     	userRepository.deleteById(userId);
     }
     
-    public UserProfileDTO getUserProfile(UserEntity principalUser) {
-    	return userProfileConverter.toResponse(principalUser);
+    public UserProfileDTO getUserProfile(UserDetails principalUser) throws Exception {
+    	Optional<UserEntity> optionalPrincipalUserEntity = userRepository.findByUsername(principalUser.getUsername());
+    	
+    	if (!optionalPrincipalUserEntity.isPresent()) {
+    		throw new Exception("User not found with username: " + principalUser.getUsername());
+    	}
+    	
+    	return userProfileConverter.toResponse(optionalPrincipalUserEntity.get());
     }
     
     public UserDTO signUpUser(SignUpDTO signUpDto) throws Exception {
