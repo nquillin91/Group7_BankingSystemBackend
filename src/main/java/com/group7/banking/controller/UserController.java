@@ -3,6 +3,8 @@ package com.group7.banking.controller;
 import java.text.MessageFormat;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
+import com.group7.banking.dto.UserProfileDTO;
 import com.group7.banking.model.nosql.ConfirmationTokenEntity;
+import com.group7.banking.model.sql.UserEntity;
 import com.group7.banking.service.nosql.ConfirmationTokenService;
 import com.group7.banking.service.sql.UserService;
 
@@ -30,6 +34,12 @@ public class UserController {
     @GetMapping("/users/{id}")
     public UserDTO getUser(@PathVariable Long id) {
     	return userService.findById(id);
+    }
+    
+    @GetMapping("/users/profile")
+    public UserProfileDTO getUserProfile(HttpServletRequest request) {
+        UserEntity principalUser = (UserEntity) request.getUserPrincipal();
+        return userService.getUserProfile(principalUser);
     }
     
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)

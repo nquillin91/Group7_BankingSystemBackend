@@ -18,8 +18,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.group7.banking.component.UserEntityConverter;
+import com.group7.banking.component.UserProfileConverter;
 import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
+import com.group7.banking.dto.UserProfileDTO;
 import com.group7.banking.model.nosql.ConfirmationTokenEntity;
 import com.group7.banking.model.nosql.EmailAddressEntity;
 import com.group7.banking.model.nosql.NameEntity;
@@ -53,6 +55,9 @@ public class UserService {
     
     @Autowired
     private UserEntityConverter userEntityConverter;
+    
+    @Autowired
+    private UserProfileConverter userProfileConverter;
     
     @Autowired
     private BillingAddressRepository billingAddressRepository;
@@ -101,6 +106,10 @@ public class UserService {
     
     public void deleteById(Long userId) {
     	userRepository.deleteById(userId);
+    }
+    
+    public UserProfileDTO getUserProfile(UserEntity principalUser) {
+    	return userProfileConverter.toResponse(principalUser);
     }
     
     public UserDTO signUpUser(SignUpDTO signUpDto) throws Exception {
