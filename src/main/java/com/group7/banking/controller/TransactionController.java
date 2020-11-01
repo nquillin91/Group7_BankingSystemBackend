@@ -19,7 +19,6 @@ public class TransactionController {
 	
 	@Autowired
 	private AccountService accountService;
-	//@CrossOrigin(origins="http://localhost:4200")  
 	@PostMapping(value = "/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String transaction(@RequestBody TransactionDTO transactionDTO) throws Exception {
 		AccountEntity accountDetails = null;
@@ -34,7 +33,7 @@ public class TransactionController {
 		/*Getting the account object*/ 
 
 
-		accountDetails = accountService.findById(transactionDTO.getTargetAccountDetails().getId());
+		accountDetails = accountService.findById(transactionDTO.getSenderAccountNumber());
 
 
 		/* Verifying Details of both target account and origin account */
