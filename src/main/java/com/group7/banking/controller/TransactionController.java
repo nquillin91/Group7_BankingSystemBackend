@@ -19,8 +19,8 @@ public class TransactionController {
 	
 	@Autowired
 	private AccountService accountService;
-	@CrossOrigin(origins="http://localhost:4200")  
-	@GetMapping(value = "/transaction", produces = MediaType.APPLICATION_JSON_VALUE)
+	//@CrossOrigin(origins="http://localhost:4200")  
+	@PostMapping(value = "/transaction", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public String transaction(@RequestBody TransactionDTO transactionDTO) throws Exception {
 		AccountEntity accountDetails = null;
 		boolean isVerified;
