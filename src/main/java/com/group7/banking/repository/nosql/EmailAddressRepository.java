@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.group7.banking.model.nosql.EmailAddressEntity;
 
 @Repository
-public interface EmailAddressRepository extends MongoRepository<EmailAddressEntity, String> {
+public interface EmailAddressRepository extends MongoRepository<EmailAddressEntity, Long> {
 	
 	@Query("{user_id: ?0}")
 	public List<EmailAddressEntity> findByUserId(Long userId);

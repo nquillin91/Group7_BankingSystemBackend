@@ -18,7 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -46,6 +45,7 @@ public class UserEntity implements UserDetails {
 	private Long id;
 	
 	@Getter
+	@Setter
 	@Column(name="user_name")
 	private String username;
 	
@@ -61,14 +61,14 @@ public class UserEntity implements UserDetails {
 	
 	@Getter
 	@Setter
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "billing_address_id", referencedColumnName = "id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "billing_address_id")
 	private BillingAddressEntity billingAddress;
 	
 	@Getter
 	@Setter
-	@OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "ssn_id", referencedColumnName = "id")
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ssn_id")
 	private SsnEntity ssn;
 	
 	@Getter

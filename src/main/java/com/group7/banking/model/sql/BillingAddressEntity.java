@@ -2,14 +2,13 @@ package com.group7.banking.model.sql;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import lombok.AccessLevel;
@@ -32,26 +31,31 @@ public class BillingAddressEntity  implements Serializable {
 
 	@Getter
 	@Setter
-	@OneToMany(mappedBy = "billingAddress")
-	@ToString.Exclude private Set<UserEntity> users;
+	@OneToOne(mappedBy = "billingAddress")
+	@ToString.Exclude private UserEntity user;
 	
 	@Getter
+	@Setter
 	@Column(name="address_line_1")
 	private String addressLine1;
 	
 	@Getter
+	@Setter
 	@Column(name="address_line_2")
 	private String addressLine2;
 	
 	@Getter
+	@Setter
 	@Column(name="city")
 	private String city;
 	
 	@Getter
+	@Setter
 	@Column(name="state")
 	private String state;
 	
 	@Getter
+	@Setter
 	@Column(name="zipcode")
 	private String zipcode;
 	
@@ -60,11 +64,13 @@ public class BillingAddressEntity  implements Serializable {
 	private LocalDateTime createdDate;
 	
 	@Getter
+	@Setter
 	@Column(name="last_updated_date")
 	private LocalDateTime lastUpdatedDate;
 
-	public BillingAddressEntity(String addressLine1, String addressLine2,
+	public BillingAddressEntity(UserEntity user, String addressLine1, String addressLine2,
 			String city, String state, String zipcode) {
+		this.user = user;
 		this.addressLine1 = addressLine1;
 		this.addressLine2 = addressLine2;
 		this.city = city;

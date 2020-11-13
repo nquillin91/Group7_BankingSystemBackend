@@ -15,6 +15,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	
+	@ExceptionHandler(PasswordIncorrectException.class)
+	public final ResponseEntity<Object> handlePasswordIncorrectException(PasswordIncorrectException ex, WebRequest request) {
+		ExceptionResponse exceptionResponse = new ExceptionResponse(ex.getMessage(),
+				request.getDescription(false), new Date());
+		
+		return new ResponseEntity<Object>(exceptionResponse, HttpStatus.FORBIDDEN);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 

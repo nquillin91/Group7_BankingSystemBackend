@@ -19,9 +19,12 @@ import org.springframework.stereotype.Service;
 
 import com.group7.banking.component.UserEntityConverter;
 import com.group7.banking.component.UserProfileConverter;
+import com.group7.banking.dto.PasswordDTO;
 import com.group7.banking.dto.SignUpDTO;
 import com.group7.banking.dto.UserDTO;
 import com.group7.banking.dto.UserProfileDTO;
+import com.group7.banking.dto.UsernameDTO;
+import com.group7.banking.exception.PasswordIncorrectException;
 import com.group7.banking.model.nosql.ConfirmationTokenEntity;
 import com.group7.banking.model.nosql.EmailAddressEntity;
 import com.group7.banking.model.nosql.NameEntity;
@@ -103,16 +106,45 @@ public class UserService {
     	
     	return userData;
     }
+	
+	public void updateUsername(long userId, UsernameDTO dto) {
+		Optional<UserEntity> optionalUser = userRepository.findById(userId);
+		
+		if (optionalUser.isPresent()) {
+			UserEntity user = optionalUser.get();
+			
+			user.setUsername(dto.getUsername());
+			
+			userRepository.save(user);
+		}
+	}
+	
+	public void updatePassword(long userId, PasswordDTO dto) throws PasswordIncorrectException {
+		Optional<UserEntity> optionalUser = userRepository.findById(userId);
+		
+		if (optionalUser.isPresent()) {
+			UserEntity user = optionalUser.get();
+			
+			if (bCryptPasswordEncoder.matches(dto.getExistingPassword(), user.getPassword())) {
+				String encryptedPassword = bCryptPasswordEncoder.encode(dto.getNewPassword());
+		    	user.setPassword(encryptedPassword);
+				
+				userRepository.save(user);
+			} else {
+				throw new PasswordIncorrectException("Existing password incorrect.");
+			}
+		}
+	}
     
     public void deleteById(Long userId) {
     	userRepository.deleteById(userId);
     }
     
-    public UserProfileDTO getUserProfile(String principalUser) throws Exception {
-    	Optional<UserEntity> optionalPrincipalUserEntity = userRepository.findByUsername(principalUser);
+    public UserProfileDTO getUserProfile(String username) throws Exception {
+    	Optional<UserEntity> optionalPrincipalUserEntity = userRepository.findByUsername(username);
     	
     	if (!optionalPrincipalUserEntity.isPresent()) {
-    		throw new Exception("User not found with username: " + principalUser);
+    		throw new Exception("User not found with username: " + username);
     	}
     	
     	return userProfileConverter.toResponse(optionalPrincipalUserEntity.get());
@@ -159,15 +191,10 @@ public class UserService {
     	
     	// This should look up matching addresses first
     	// Then either create and add the user to it OR get the match and add the user to that
-    	BillingAddressEntity billingAddress = new BillingAddressEntity(signUpDto.getAddressLine1(),
+    	BillingAddressEntity billingAddress = new BillingAddressEntity(user, signUpDto.getAddressLine1(),
     			signUpDto.getAddressLine2(),
     			signUpDto.getCity(), signUpDto.getState(), signUpDto.getZipcode());
     	
-    	if (billingAddress.getUsers() == null) {
-    		Set<UserEntity> users = new HashSet<UserEntity>();
-    		users.add(user);
-    		billingAddress.setUsers(users);
-    	}
     	user.setBillingAddress(billingAddress);
     	
     	SsnEntity ssn = new SsnEntity(user, signUpDto.getSsn());
