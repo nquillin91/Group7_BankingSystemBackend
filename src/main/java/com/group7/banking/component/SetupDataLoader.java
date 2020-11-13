@@ -12,7 +12,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
+import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.nosql.EmailAddressEntity;
 import com.group7.banking.model.nosql.NameEntity;
 import com.group7.banking.model.sql.PrivilegeEntity;
@@ -106,7 +106,6 @@ public class SetupDataLoader implements
     	
     	NameEntity name = new NameEntity(user.getId(), "Admin", "", "");
     	EmailAddressEntity email = new EmailAddressEntity(user.getId(), "admin@admin.com");
-    	
     	nameRepository.save(name);
     	emailAddressRepository.save(email);
     }

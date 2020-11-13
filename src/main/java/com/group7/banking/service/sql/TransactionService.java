@@ -27,7 +27,7 @@ public class TransactionService {
 	/* Check minimum balance of verified origin account */
 	public boolean checkBalance(AccountEntity accountDetails, TransactionDTO transactionDTO) {
 		boolean checkbal = false;
-		checkbal = accountDetails.getBalance() > transactionDTO.getAmount();
+		checkbal = accountDetails.getBalance() > transactionDTO.getTransferAmount();
 		return checkbal;
 
 		// TODO:Check default balance condition for saving account
@@ -40,7 +40,7 @@ public class TransactionService {
 		double newAccountBalance;
 
 		originAccountBalance = accountDetails.getBalance();
-		amountRequested = transactionDTO.getAmount();
+		amountRequested = transactionDTO.getTransferAmount();
 		newAccountBalance = originAccountBalance - amountRequested;
 		accountDetails.setBalance(newAccountBalance);
 
