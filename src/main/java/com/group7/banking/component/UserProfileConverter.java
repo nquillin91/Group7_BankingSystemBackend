@@ -78,7 +78,7 @@ public class UserProfileConverter {
 			userProfile.setAddressLine2(billingAddress.getAddressLine2());
 			userProfile.setCity(billingAddress.getCity());
 			userProfile.setState(billingAddress.getState());
-			userProfile.setZipCode(billingAddress.getZipcode());
+			userProfile.setZipcode(billingAddress.getZipcode());
 		}
 		
 		return userProfile;
