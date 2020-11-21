@@ -7,19 +7,17 @@ import com.group7.banking.model.sql.TransactionEntity;
 import com.group7.banking.model.sql.UserEntity;
 
 import lombok.Data;
+
 @Data
 public class AccountDTO {
 	private static enum Status {
-		ACTIVE,
-		INACTIVE
+		ACTIVE, INACTIVE
 	}
-	
+
 	public static enum Type {
-		CHECKING,
-		SAVINGS
+		CHECKING, SAVINGS
 	}
-	
-	
+
 	private long id;
 	UserEntity user;
 	private Type accountType;
