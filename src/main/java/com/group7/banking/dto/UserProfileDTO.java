@@ -17,4 +17,5 @@ public class UserProfileDTO {
 	private String city;
 	private String state;
 	private String zipcode;
+	private Long id;
 }

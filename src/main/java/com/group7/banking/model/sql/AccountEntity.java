@@ -50,14 +50,14 @@ public class AccountEntity implements Serializable {
 	
 	@Getter
 	@Column(name="account_type")
-	private Type accountType;
+	private int accountType;
 	
 	@Getter
 	@Setter
 	private Double balance;
 	
 	@Getter
-	private Status status;
+	private int status;
 	
 	@Getter
 	@Column(name="outgoing_transactions")
@@ -77,11 +77,11 @@ public class AccountEntity implements Serializable {
 	@Column(name="last_updated_date")
 	private LocalDateTime lastUpdatedDate;
 
-	public AccountEntity(UserEntity user, Type accountType, Double startingBalance) {
+	public AccountEntity(UserEntity user, int i, Double startingBalance) {
 		this.user = user;
-		this.accountType = accountType;
+		this.accountType = i;
 		this.balance = startingBalance;
-		this.status = Status.ACTIVE;
+		this.status = 0;
 		this.createdDate = LocalDateTime.now();
 		this.lastUpdatedDate = LocalDateTime.now();
 	}

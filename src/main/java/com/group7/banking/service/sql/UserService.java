@@ -201,9 +201,12 @@ public class UserService {
     	
     	// TODO: This can probably be removed and we can have some kind of add account
     	// functionality (start with no accounts)
-    	AccountEntity account = new AccountEntity(user, AccountEntity.Type.CHECKING, 0.0);
+    	AccountEntity account = new AccountEntity(user, 0, 1000.0);
     	user.addAccount(account);
+    	AccountEntity account1 = new AccountEntity(user, 1, 500.0);
+    	user.addAccount(account1);
     	accountRepository.save(account);
+    	accountRepository.save(account1);
     	
     	NameEntity name = new NameEntity(user.getId(), signUpDto.getFirstName(),
     			signUpDto.getMiddleName(), signUpDto.getLastName());

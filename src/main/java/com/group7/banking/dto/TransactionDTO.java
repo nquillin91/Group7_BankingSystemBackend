@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class TransactionDTO {
 	private String senderName;
-	private String accountType;
+	private int accountType;
 	private long senderAccountNumber;
 	private double accountBalance;
 	private String receiverName;
@@ -16,7 +16,11 @@ public class TransactionDTO {
 	private double transferAmount;
 	private Date date;
 	private String remarks;
-	
- 
+	private int status;
+	public enum Status {
+		PENDING,
+		COMPLETE,
+		REJECTED
+	}
 
 }

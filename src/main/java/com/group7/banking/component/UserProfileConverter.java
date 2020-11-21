@@ -46,6 +46,7 @@ public class UserProfileConverter {
 		
 		// Set username on the profile
 		userProfile.setUsername(userEntity.getUsername());
+		userProfile.setId(userEntity.getId());
 		
 		// Pull email address from the first entity in the list (supposed to be primary email)
 		userProfile.setEmailAddress(emailAddressList.get(0).getEmailAddress());
