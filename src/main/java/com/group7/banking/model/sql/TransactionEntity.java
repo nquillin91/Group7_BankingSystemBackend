@@ -1,7 +1,10 @@
 package com.group7.banking.model.sql;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,7 +34,7 @@ public class TransactionEntity  implements Serializable {
 		DEPOSIT
 	}
 	
-	private enum Status {
+	public enum Status {
 		PENDING,
 		COMPLETE,
 		REJECTED
@@ -43,46 +46,52 @@ public class TransactionEntity  implements Serializable {
 	private Long id;
 	
 	@Getter
+	@Setter
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "origin_account_id", referencedColumnName = "id")
 	private AccountEntity originAccount;
 	
 	@Getter
 	@ManyToOne(fetch = FetchType.LAZY)
+	@Setter
     @JoinColumn(name = "target_account_id", referencedColumnName = "id")
 	private AccountEntity targetAccount;
 	
 	@Getter
-	private Type transactionType;
+	@Setter
+	private String transactionType;
 	
 	@Getter
+	@Setter
 	private Double amount;
 	
+	@Setter
 	@Getter
 	private String comments;
 	
 	@Getter
 	@Setter
-	private Status status;
+	private int status;
 	
 	@Getter
+	@Setter
 	@Column(name = "created_date")
-	private LocalDateTime createdDate;
+	private Date createdDate;
 	
 	@Getter
 	@Setter
 	@Column(name = "last_updated_date")
 	private LocalDateTime lastUpdatedDate;
 
-	public TransactionEntity(AccountEntity originAccount, AccountEntity targetAccount, Type transactionType, 
-			Double amount, String comments) {
+	public TransactionEntity(AccountEntity originAccount, AccountEntity targetAccount, String transactionType, 
+			Double amount, String comments,Date date) {
 		this.originAccount = originAccount;
 		this.targetAccount = targetAccount;
 		this.transactionType = transactionType;
 		this.amount = amount;
 		this.comments = comments;
-		this.status = Status.PENDING;
-		this.createdDate = LocalDateTime.now();
+		this.status = 0;
+		this.createdDate =date;
 		this.lastUpdatedDate = LocalDateTime.now();
 	}
 }

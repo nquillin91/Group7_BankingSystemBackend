@@ -21,12 +21,10 @@ public class AccountDTO {
 	
 	
 	private long id;
-	UserEntity user;
-	private Type accountType;
+	UserProfileDTO user;
+	private int accountType;
 	private Double balance;
-	private Status status;
-	private Set<TransactionEntity> outgoingTransactions;
-	private Set<TransactionEntity> incomingTransactions;
+	private int status;
 	private LocalDateTime createdDate;
 	private LocalDateTime lastUpdatedDate;
 }
